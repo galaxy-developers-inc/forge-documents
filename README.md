@@ -103,8 +103,8 @@
 
 ## 📞 Контакты
 
-- **GitHub:** https://github.com/ProMarketolog/forge-documents
-- **Организация:** ProMarketolog
+- **GitHub:** https://github.com/galaxy-developers-inc/forge-documents
+- **Организация:** Galaxy Developers
 
 ## ✅ Статус
 
@@ -118,4 +118,4 @@
 
 **Production Line готова. Давайте производить! 🏭**
 
-*Версия: 1.0 | Дата: 2025-12-22*
+*Версия: 1.0 | Обновлено: февраль 2026*
