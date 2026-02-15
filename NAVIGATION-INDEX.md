@@ -49,7 +49,7 @@
 | Кто ты | Зачем | Читай | Время |
 |--------|-------|-------|-------|
 | **Собственник / Investor** | Решить инвестировать | EXECUTIVE-SUMMARY | 5 мин |
-| **Sales / Алик** | Знать как звонить | OPERATIONALS-BIBLE | 30 мин |
+| **Sales / Паша (CPO, 20%)** | Знать как звонить | OPERATIONALS-BIBLE | 30 мин |
 | **Backend / Вася** | Знать what to code | SYSTEM-TEMPLATES-ARCHETYPES | 1 час |
 | **Frontend / Маша** | Знать компоненты | SYSTEM-TEMPLATES-ARCHETYPES | 45 мин |
 | **OPS / Саша** | Знать как деплоить | OPERATIONALS-BIBLE | 45 мин |
@@ -122,7 +122,7 @@
 3. Решаю: Инвестировать или нет
 ```
 
-### ПУТЬ 2: АЛИК (SALES) - 1 час
+### ПУТЬ 2: ПАША (SALES, CPO 20%) - 1 час
 ```
 1. EXECUTIVE-SUMMARY (5 мин) - контекст
 2. OPERATIONALS-BIBLE section "ЗВОНОК" (15 мин) - скрипт
@@ -204,7 +204,7 @@
 
 ### ЭТАП 6: ПЕРВЫЕ КЛИЕНТЫ (Неделя 7-8)
 ```
-Алик:
+Паша:
 → OPERATIONALS-BIBLE section "ЗВОНОК"
 → PRODUCTION-LINE section "ПРИМЕРЫ СЛУЧАЕВ"
 ```
