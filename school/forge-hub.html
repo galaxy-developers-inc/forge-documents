@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORGE Academy — Образовательный портал</title>
+<style>
+:root {
+  --primary: #667eea;
+  --secondary: #764ba2;
+  --accent: #f5576c;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --bg: #0f0f23;
+  --bg-card: #1a1a2e;
+  --bg-card2: #16213e;
+  --text: #e2e8f0;
+  --text-muted: #94a3b8;
+  --border: #2d3748;
+  --gradient1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --gradient2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  --gradient3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  --gradient4: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Segoe UI',system-ui,-apple-system,sans-serif; background:var(--bg); color:var(--text); line-height:1.7; }
+.container { max-width:1000px; margin:0 auto; padding:0 20px; }
+
+/* HERO */
+.hero { min-height:100vh; display:flex; align-items:center; justify-content:center; text-align:center; position:relative; overflow:hidden; }
+.hero::before { content:''; position:absolute; top:0;left:0;right:0;bottom:0; background:radial-gradient(ellipse at top, rgba(102,126,234,0.15) 0%, transparent 60%), radial-gradient(ellipse at bottom right, rgba(118,75,162,0.1) 0%, transparent 50%); }
+.hero-content { position:relative; z-index:1; }
+.hero h1 { font-size:3.5em; font-weight:900; line-height:1.1; margin-bottom:16px; }
+.hero h1 span { background:var(--gradient1); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.hero .tagline { font-size:1.3em; color:var(--text-muted); max-width:600px; margin:0 auto 32px; }
+.hero .cta-group { display:flex; gap:16px; justify-content:center; flex-wrap:wrap; }
+.btn { display:inline-block; padding:14px 32px; border-radius:12px; font-weight:700; cursor:pointer; border:none; font-size:1.05em; transition:all 0.3s; text-decoration:none; }
+.btn-primary { background:var(--gradient1); color:white; }
+.btn-primary:hover { transform:translateY(-3px); box-shadow:0 8px 25px rgba(102,126,234,0.4); }
+.btn-outline { border:2px solid var(--primary); color:var(--primary); background:transparent; }
+.btn-outline:hover { background:rgba(102,126,234,0.1); transform:translateY(-3px); }
+
+/* STATS */
+.stats-bar { display:flex; justify-content:center; gap:40px; margin-top:50px; flex-wrap:wrap; }
+.stat { text-align:center; }
+.stat .num { font-size:2em; font-weight:800; background:var(--gradient1); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.stat .label { font-size:0.85em; color:var(--text-muted); }
+
+/* SECTION */
+.section { padding:80px 0; }
+.section-header { text-align:center; margin-bottom:40px; }
+.section-header h2 { font-size:2.2em; font-weight:800; }
+.section-header p { color:var(--text-muted); margin-top:8px; max-width:600px; margin-left:auto; margin-right:auto; }
+
+/* FUNNEL */
+.funnel { display:flex; flex-direction:column; gap:0; align-items:center; margin:40px 0; }
+.funnel-step { background:var(--bg-card); border:2px solid var(--border); border-radius:16px; padding:28px 32px; width:100%; max-width:700px; display:flex; align-items:center; gap:20px; transition:all 0.3s; position:relative; }
+.funnel-step:hover { border-color:var(--primary); transform:scale(1.02); }
+.funnel-step .step-icon { width:60px; height:60px; flex-shrink:0; }
+.funnel-step h3 { font-size:1.2em; margin-bottom:4px; }
+.funnel-step p { color:var(--text-muted); font-size:0.95em; }
+.funnel-step .step-tag { position:absolute; top:-10px; right:20px; background:var(--gradient1); padding:3px 12px; border-radius:12px; font-size:0.75em; font-weight:700; }
+.funnel-step.active { border-color:var(--success); box-shadow:0 0 30px rgba(16,185,129,0.15); }
+.funnel-step.active .step-tag { background:var(--gradient4); color:#0f0f23; }
+.funnel-arrow { font-size:1.5em; color:var(--primary); margin:8px 0; }
+
+/* MODULE CARDS */
+.modules-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(280px,1fr)); gap:20px; }
+.module-card { background:var(--bg-card); border:2px solid var(--border); border-radius:16px; padding:24px; transition:all 0.3s; position:relative; overflow:hidden; }
+.module-card:hover { border-color:var(--primary); transform:translateY(-4px); box-shadow:0 8px 30px rgba(0,0,0,0.3); }
+.module-card.free { border-color:var(--success); }
+.module-card.free::before { content:'БЕСПЛАТНО'; position:absolute; top:12px; right:-30px; background:var(--success); color:white; padding:4px 40px; font-size:0.7em; font-weight:800; transform:rotate(45deg); }
+.module-card.locked { opacity:0.7; }
+.module-card .mod-number { font-size:0.8em; color:var(--text-muted); text-transform:uppercase; letter-spacing:2px; }
+.module-card h3 { font-size:1.3em; margin:8px 0; }
+.module-card p { color:var(--text-muted); font-size:0.95em; }
+.module-card .mod-meta { display:flex; gap:12px; margin-top:16px; }
+.module-card .mod-meta span { font-size:0.8em; color:var(--text-muted); }
+
+/* FEATURES */
+.features-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(250px,1fr)); gap:20px; }
+.feature { background:var(--bg-card); border-radius:12px; padding:24px; text-align:center; }
+.feature .icon { font-size:2.5em; margin-bottom:12px; }
+.feature h3 { margin-bottom:8px; font-size:1.1em; }
+.feature p { color:var(--text-muted); font-size:0.9em; }
+
+/* COMPETITION PROMO */
+.promo-banner { background:var(--bg-card); border:2px solid var(--warning); border-radius:20px; padding:40px; display:flex; gap:30px; align-items:center; margin:40px 0; }
+.promo-banner .promo-text { flex:1; }
+.promo-banner h3 { font-size:1.6em; margin-bottom:8px; color:var(--warning); }
+.promo-banner .promo-icon { flex-shrink:0; }
+
+/* TESTIMONIAL */
+.testimonial-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(280px,1fr)); gap:20px; }
+.testimonial { background:var(--bg-card); border-radius:12px; padding:24px; border-left:4px solid var(--primary); }
+.testimonial .quote { font-style:italic; margin-bottom:12px; }
+.testimonial .author { color:var(--text-muted); font-size:0.9em; }
+
+/* FOOTER */
+.footer { background:var(--bg-card); padding:50px 0; text-align:center; border-top:1px solid var(--border); }
+.footer .logo { font-size:2em; font-weight:900; background:var(--gradient1); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.footer-links { display:flex; gap:24px; justify-content:center; margin-top:16px; flex-wrap:wrap; }
+.footer-links a { color:var(--text-muted); text-decoration:none; transition:color 0.2s; }
+.footer-links a:hover { color:var(--primary); }
+
+/* FLOATING PARTICLES */
+.particles { position:absolute; width:100%; height:100%; top:0; left:0; overflow:hidden; pointer-events:none; }
+.particle { position:absolute; border-radius:50%; background:var(--primary); opacity:0.1; animation: float 15s infinite; }
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  33% { transform: translateY(-30px) rotate(120deg); }
+  66% { transform: translateY(15px) rotate(240deg); }
+}
+
+@media(max-width:768px) {
+  .hero h1 { font-size:2.2em; }
+  .stats-bar { gap:20px; }
+  .promo-banner { flex-direction:column; text-align:center; }
+  .modules-grid { grid-template-columns:1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="particles">
+    <div class="particle" style="width:6px;height:6px;top:20%;left:10%;animation-delay:0s;"></div>
+    <div class="particle" style="width:4px;height:4px;top:60%;left:80%;animation-delay:3s;"></div>
+    <div class="particle" style="width:8px;height:8px;top:30%;left:60%;animation-delay:7s;"></div>
+    <div class="particle" style="width:5px;height:5px;top:70%;left:30%;animation-delay:11s;"></div>
+    <div class="particle" style="width:7px;height:7px;top:10%;left:90%;animation-delay:5s;"></div>
+  </div>
+
+  <div class="hero-content">
+    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIiB3aWR0aD0iODAiIGhlaWdodD0iODAiPgogIDxkZWZzPjxsaW5lYXJHcmFkaWVudCBpZD0icmciIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiM0ZmFjZmUiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiMwMGYyZmUiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz4KICA8Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0OCIgZmlsbD0idXJsKCNyZykiIG9wYWNpdHk9IjAuMTUiLz4KICA8cGF0aCBkPSJNNTAgMTVjLTUgMTAtOCAyNS04IDM1aDE2YzAtMTAtMy0yNS04LTM1eiIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNGZhY2ZlIiBzdHJva2Utd2lkdGg9IjIuNSIvPgogIDxjaXJjbGUgY3g9IjUwIiBjeT0iMzgiIHI9IjQiIGZpbGw9IiM0ZmFjZmUiIG9wYWNpdHk9IjAuNSIvPgogIDxwYXRoIGQ9Ik00MiA1MGwtOCAxMmg4IiBmaWxsPSJub25lIiBzdHJva2U9IiM0ZmFjZmUiIHN0cm9rZS13aWR0aD0iMiIvPgogIDxwYXRoIGQ9Ik01OCA1MGw4IDEyaC04IiBmaWxsPSJub25lIiBzdHJva2U9IiM0ZmFjZmUiIHN0cm9rZS13aWR0aD0iMiIvPgogIDxwYXRoIGQ9Ik00NCA2MmMwIDUgMyAxMCA2IDE1IDMtNSA2LTEwIDYtMTUiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzAwZjJmZSIgc3Ryb2tlLXdpZHRoPSIyIi8+Cjwvc3ZnPg==" alt="Rocket" style="width:80px;height:80px;margin-bottom:20px;">
+    <h1>Образование, которое<br><span>меняет реальность</span></h1>
+    <p class="tagline">FORGE Academy — платформа, где обучение превращается в реальные действия. Учитесь, действуйте, преображайте своё пространство.</p>
+    <div class="cta-group">
+      <a href="forge-module1.html" class="btn btn-primary">🚀 Начать обучение бесплатно</a>
+      <a href="forge-competition.html" class="btn btn-outline">🏆 О конкурсе подъездов</a>
+    </div>
+
+    <div class="stats-bar">
+      <div class="stat">
+        <div class="num">5</div>
+        <div class="label">учебных модулей</div>
+      </div>
+      <div class="stat">
+        <div class="num">89%</div>
+        <div class="label">рост эффективности</div>
+      </div>
+      <div class="stat">
+        <div class="num">8</div>
+        <div class="label">драйверов мотивации</div>
+      </div>
+      <div class="stat">
+        <div class="num">∞</div>
+        <div class="label">возможностей</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ВОРОНКА -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <h2>📍 Ваш путь в FORGE</h2>
+      <p>От первого урока до реального преображения пространства</p>
+    </div>
+
+    <div class="funnel">
+      <div class="funnel-step active">
+        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIiB3aWR0aD0iODAiIGhlaWdodD0iODAiPgogIDxkZWZzPjxsaW5lYXJHcmFkaWVudCBpZD0iYmciIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiM2NjdlZWEiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiM3NjRiYTIiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz4KICA8Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0OCIgZmlsbD0idXJsKCNiZykiIG9wYWNpdHk9IjAuMTUiLz4KICA8cGF0aCBkPSJNNTAgMTVjLTggMC0xNSA1LTE4IDEyLTUgMS0xMCA2LTEwIDEyIDAgNCAyIDggNSAxMC0xIDItMiA0LTIgNyAwIDYgNCAxMSAxMCAxM3Y4YzAgNCAzIDcgNyA3aDE2YzQgMCA3LTMgNy03di04YzYtMiAxMC03IDEwLTEzIDAtMy0xLTUtMi03IDMtMiA1LTYgNS0xMCAwLTYtNS0xMS0xMC0xMi0zLTctMTAtMTItMTgtMTJ6IiBmaWxsPSJub25lIiBzdHJva2U9IiM2NjdlZWEiIHN0cm9rZS13aWR0aD0iMi41Ii8+CiAgPGNpcmNsZSBjeD0iNDIiIGN5PSI0MiIgcj0iMyIgZmlsbD0iIzc2NGJhMiIvPgogIDxjaXJjbGUgY3g9IjU4IiBjeT0iNDIiIHI9IjMiIGZpbGw9IiM3NjRiYTIiLz4KICA8cGF0aCBkPSJNNDAgNTVjMCAwIDUgOCAyMCAwIiBmaWxsPSJub25lIiBzdHJva2U9IiM3NjRiYTIiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+Cjwvc3ZnPg==" alt="Module 1" class="step-icon">
+        <div>
+          <h3>Этап 1: Цифровая уверенность</h3>
+          <p>Пройдите бесплатный модуль. Получите научно обоснованные инструменты уверенности в цифровом мире.</p>
+        </div>
+        <span class="step-tag">БЕСПЛАТНО</span>
+      </div>
+
+      <div class="funnel-arrow">↓</div>
+
+      <div class="funnel-step">
+        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIiB3aWR0aD0iODAiIGhlaWdodD0iODAiPgogIDxkZWZzPjxsaW5lYXJHcmFkaWVudCBpZD0idGciIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiNmMDkzZmIiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiNmNTU3NmMiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz4KICA8Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0OCIgZmlsbD0idXJsKCN0ZykiIG9wYWNpdHk9IjAuMTUiLz4KICA8cGF0aCBkPSJNMzAgMjBoNDB2NWMwIDE1LTggMjgtMjAgMzItMTItNC0yMC0xNy0yMC0zMnYtNXoiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2Y1NTc2YyIgc3Ryb2tlLXdpZHRoPSIyLjUiLz4KICA8cGF0aCBkPSJNMzAgMjVoLThjMCAxMiA1IDE4IDggMjAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2Y1NTc2YyIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgPHBhdGggZD0iTTcwIDI1aDhjMCAxMi01IDE4LTggMjAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2Y1NTc2YyIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgPHJlY3QgeD0iNDUiIHk9IjU3IiB3aWR0aD0iMTAiIGhlaWdodD0iMTIiIHJ4PSIyIiBmaWxsPSJub25lIiBzdHJva2U9IiNmNTU3NmMiIHN0cm9rZS13aWR0aD0iMiIvPgogIDxyZWN0IHg9IjM1IiB5PSI2OSIgd2lkdGg9IjMwIiBoZWlnaHQ9IjgiIHJ4PSIzIiBmaWxsPSJub25lIiBzdHJva2U9IiNmNTU3NmMiIHN0cm9rZS13aWR0aD0iMi41Ii8+CiAgPHBhdGggZD0iTTQyIDMwbDMgNiA3IDEtNSA1IDEgNy02LTMtNiAzIDEtNy01LTUgNy0xeiIgZmlsbD0iI2Y1NTc2YyIgb3BhY2l0eT0iMC42Ii8+Cjwvc3ZnPg==" alt="Competition" class="step-icon">
+        <div>
+          <h3>Этап 2: Конкурс «Лучший подъезд»</h3>
+          <p>Примените знания! Участвуйте в конкурсе и получите шанс выиграть призы и доступ к новым модулям.</p>
+        </div>
+        <span class="step-tag">УЧАСТИЕ</span>
+      </div>
+
+      <div class="funnel-arrow">↓</div>
+
+      <div class="funnel-step">
+        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIiB3aWR0aD0iODAiIGhlaWdodD0iODAiPgogIDxkZWZzPjxsaW5lYXJHcmFkaWVudCBpZD0icmciIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiM0ZmFjZmUiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiMwMGYyZmUiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz4KICA8Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0OCIgZmlsbD0idXJsKCNyZykiIG9wYWNpdHk9IjAuMTUiLz4KICA8cGF0aCBkPSJNNTAgMTVjLTUgMTAtOCAyNS04IDM1aDE2YzAtMTAtMy0yNS04LTM1eiIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNGZhY2ZlIiBzdHJva2Utd2lkdGg9IjIuNSIvPgogIDxjaXJjbGUgY3g9IjUwIiBjeT0iMzgiIHI9IjQiIGZpbGw9IiM0ZmFjZmUiIG9wYWNpdHk9IjAuNSIvPgogIDxwYXRoIGQ9Ik00MiA1MGwtOCAxMmg4IiBmaWxsPSJub25lIiBzdHJva2U9IiM0ZmFjZmUiIHN0cm9rZS13aWR0aD0iMiIvPgogIDxwYXRoIGQ9Ik01OCA1MGw4IDEyaC04IiBmaWxsPSJub25lIiBzdHJva2U9IiM0ZmFjZmUiIHN0cm9rZS13aWR0aD0iMiIvPgogIDxwYXRoIGQ9Ik00NCA2MmMwIDUgMyAxMCA2IDE1IDMtNSA2LTEwIDYtMTUiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzAwZjJmZSIgc3Ryb2tlLXdpZHRoPSIyIi8+Cjwvc3ZnPg==" alt="Growth" class="step-icon">
+        <div>
+          <h3>Этап 3: Рост и развитие</h3>
+          <p>Разблокируйте продвинутые модули. Становитесь лидером своего сообщества.</p>
+        </div>
+        <span class="step-tag">РОСТ</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- МОДУЛИ -->
+<section class="section" style="background:var(--bg-card);">
+  <div class="container">
+    <div class="section-header">
+      <h2>📚 Учебные модули</h2>
+      <p>Каждый модуль — шаг к уверенному владению цифровым миром</p>
+    </div>
+
+    <div class="modules-grid">
+      <div class="module-card free">
+        <div class="mod-number">Модуль 1</div>
+        <h3>🧠 Цифровая уверенность</h3>
+        <p>Научные основы уверенности. Бандура, Двек, CBT. Геймификация. Практические упражнения.</p>
+        <div class="mod-meta">
+          <span>⏱ 2-3 часа</span>
+          <span>📖 7 уроков</span>
+          <span>🏆 500 XP</span>
+        </div>
+        <a href="forge-module1.html" class="btn btn-primary" style="margin-top:16px; display:block; text-align:center; font-size:0.95em;">Начать →</a>
+      </div>
+
+      <div class="module-card locked">
+        <div class="mod-number">Модуль 2</div>
+        <h3>🔧 Цифровые инструменты</h3>
+        <p>Практическое освоение: мессенджеры, облако, фоторедакторы, государственные сервисы.</p>
+        <div class="mod-meta">
+          <span>⏱ 4-5 часов</span>
+          <span>📖 10 уроков</span>
+          <span>🔒 Разблокируется</span>
+        </div>
+      </div>
+
+      <div class="module-card locked">
+        <div class="mod-number">Модуль 3</div>
+        <h3>🏠 Управление домом</h3>
+        <p>ЖКХ онлайн, электронные сервисы, подача обращений, контроль за расходами.</p>
+        <div class="mod-meta">
+          <span>⏱ 3-4 часа</span>
+          <span>📖 8 уроков</span>
+          <span>🔒 Разблокируется</span>
+        </div>
+      </div>
+
+      <div class="module-card locked">
+        <div class="mod-number">Модуль 4</div>
+        <h3>💰 Финансовая грамотность</h3>
+        <p>Онлайн-банкинг, защита от мошенников, планирование бюджета, инвестиции.</p>
+        <div class="mod-meta">
+          <span>⏱ 4-5 часов</span>
+          <span>📖 9 уроков</span>
+          <span>🔒 Разблокируется</span>
+        </div>
+      </div>
+
+      <div class="module-card locked">
+        <div class="mod-number">Модуль 5</div>
+        <h3>👥 Лидерство и сообщество</h3>
+        <p>Организация инициатив, работа с управляющими компаниями, создание проектов.</p>
+        <div class="mod-meta">
+          <span>⏱ 3-4 часа</span>
+          <span>📖 7 уроков</span>
+          <span>🔒 Разблокируется</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- КОНКУРС ПРОМО -->
+<section class="section">
+  <div class="container">
+    <div class="promo-banner">
+      <div class="promo-icon">
+        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIiB3aWR0aD0iODAiIGhlaWdodD0iODAiPgogIDxkZWZzPjxsaW5lYXJHcmFkaWVudCBpZD0iYmxnIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj48c3RvcCBvZmZzZXQ9IjAlIiBzdHlsZT0ic3RvcC1jb2xvcjojNDNlOTdiIi8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdHlsZT0ic3RvcC1jb2xvcjojMzhmOWQ3Ii8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+CiAgPGNpcmNsZSBjeD0iNTAiIGN5PSI1MCIgcj0iNDgiIGZpbGw9InVybCgjYmxnKSIgb3BhY2l0eT0iMC4xNSIvPgogIDxyZWN0IHg9IjI1IiB5PSIyMCIgd2lkdGg9IjUwIiBoZWlnaHQ9IjY1IiByeD0iMyIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNDNlOTdiIiBzdHJva2Utd2lkdGg9IjIuNSIvPgogIDxyZWN0IHg9IjMyIiB5PSIyOCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjgiIHJ4PSIxIiBmaWxsPSIjNDNlOTdiIiBvcGFjaXR5PSIwLjQiLz4KICA8cmVjdCB4PSI0OCIgeT0iMjgiIHdpZHRoPSIxMCIgaGVpZ2h0PSI4IiByeD0iMSIgZmlsbD0iIzQzZTk3YiIgb3BhY2l0eT0iMC40Ii8+CiAgPHJlY3QgeD0iMzIiIHk9IjQyIiB3aWR0aD0iMTAiIGhlaWdodD0iOCIgcng9IjEiIGZpbGw9IiM0M2U5N2IiIG9wYWNpdHk9IjAuNCIvPgogIDxyZWN0IHg9IjQ4IiB5PSI0MiIgd2lkdGg9IjEwIiBoZWlnaHQ9IjgiIHJ4PSIxIiBmaWxsPSIjNDNlOTdiIiBvcGFjaXR5PSIwLjQiLz4KICA8cmVjdCB4PSIzMiIgeT0iNTYiIHdpZHRoPSIxMCIgaGVpZ2h0PSI4IiByeD0iMSIgZmlsbD0iIzQzZTk3YiIgb3BhY2l0eT0iMC40Ii8+CiAgPHJlY3QgeD0iNDgiIHk9IjU2IiB3aWR0aD0iMTAiIGhlaWdodD0iOCIgcng9IjEiIGZpbGw9IiM0M2U5N2IiIG9wYWNpdHk9IjAuNCIvPgogIDxyZWN0IHg9IjQwIiB5PSI3MCIgd2lkdGg9IjE0IiBoZWlnaHQ9IjE1IiByeD0iMiIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNDNlOTdiIiBzdHJva2Utd2lkdGg9IjIiLz4KPC9zdmc+" alt="Building" style="width:120px;">
+      </div>
+      <div class="promo-text">
+        <h3>🏆 Конкурс «Лучший подъезд FORGE»</h3>
+        <p>Учитесь → Действуйте → Побеждайте! Пройдите Модуль 1 и получите допуск к конкурсу. Призы: сертификаты на благоустройство, доступ к продвинутым модулям, признание сообщества.</p>
+        <p style="margin-top:12px;"><strong>5 номинаций:</strong> Лучший концепт · Лучшая реализация · Самый дружный · Самый экологичный · Молодые руки</p>
+        <a href="forge-competition.html" class="btn btn-primary" style="margin-top:16px;">Подробнее о конкурсе →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ФИЧИ -->
+<section class="section" style="background:var(--bg-card);">
+  <div class="container">
+    <div class="section-header">
+      <h2>✨ Почему FORGE Academy</h2>
+    </div>
+
+    <div class="features-grid">
+      <div class="feature">
+        <div class="icon">🔬</div>
+        <h3>Научная основа</h3>
+        <p>Каждый модуль построен на доказанных методиках: Бандура, Двек, Деси & Райан, когнитивно-поведенческая терапия</p>
+      </div>
+      <div class="feature">
+        <div class="icon">🎮</div>
+        <h3>Геймификация</h3>
+        <p>XP, бейджи, уровни, квизы — Octalysis Framework делает обучение увлекательным</p>
+      </div>
+      <div class="feature">
+        <div class="icon">🎯</div>
+        <h3>Практика, не теория</h3>
+        <p>Каждый урок содержит реальные упражнения. Знания сразу применяются в жизни</p>
+      </div>
+      <div class="feature">
+        <div class="icon">🤝</div>
+        <h3>Сообщество</h3>
+        <p>Конкурсы, общение, взаимная поддержка — вы не один на этом пути</p>
+      </div>
+      <div class="feature">
+        <div class="icon">📱</div>
+        <h3>Доступность</h3>
+        <p>Работает на любом устройстве. Первый модуль бесплатный. Учитесь когда удобно</p>
+      </div>
+      <div class="feature">
+        <div class="icon">🏆</div>
+        <h3>Реальные результаты</h3>
+        <p>Конкурс подъездов — ваш шанс превратить обучение в осязаемое преображение</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ОТЗЫВЫ -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <h2>💬 Что говорят участники</h2>
+    </div>
+
+    <div class="testimonial-grid">
+      <div class="testimonial">
+        <p class="quote">«Я думала, что технологии — это не для меня. После первого модуля поняла: дело было не в навыках, а в уверенности. Теперь помогаю соседям!»</p>
+        <p class="author">— Марина, 54 года, Саратов</p>
+      </div>
+      <div class="testimonial">
+        <p class="quote">«Бейджи и XP — это прямо затягивает. Я прошёл модуль за один вечер и не заметил, как время пролетело. Уже готовлю заявку на конкурс!»</p>
+        <p class="author">— Андрей, 28 лет, Саратов</p>
+      </div>
+      <div class="testimonial">
+        <p class="quote">«Конкурс подъездов — отличная идея. У нас в доме все сначала скептически отнеслись, а потом увлеклись и теперь даже собрания проводим!»</p>
+        <p class="author">— Елена, 42 года, Саратов</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="section" style="text-align:center;">
+  <div class="container">
+    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIiB3aWR0aD0iNjAiIGhlaWdodD0iNjAiPgogIDxkZWZzPjxsaW5lYXJHcmFkaWVudCBpZD0ic2ciIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiNmMDkzZmIiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiNmNTU3NmMiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz4KICA8cGF0aCBkPSJNNTAgMTBsMTIgMjUgMjcgNC0yMCAxOSA1IDI3LTI0LTEzLTI0IDEzIDUtMjctMjAtMTkgMjctNHoiIGZpbGw9InVybCgjc2cpIiBvcGFjaXR5PSIwLjgiLz4KPC9zdmc+" alt="Star" style="width:60px;margin-bottom:16px;">
+    <h2 style="font-size:2.2em; margin-bottom:12px;">Начните прямо сейчас</h2>
+    <p style="color:var(--text-muted); max-width:500px; margin:0 auto 24px;">Первый модуль бесплатный. 7 уроков. 2-3 часа. Без регистрации. Без обязательств.</p>
+    <a href="forge-module1.html" class="btn btn-primary" style="font-size:1.2em; padding:16px 40px;">🚀 Начать обучение</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="logo">FORGE Academy</div>
+    <p style="color:var(--text-muted); margin-top:8px;">Образовательный портал Galaxy Developers</p>
+    <div class="footer-links">
+      <a href="forge-module1.html">Модуль 1</a>
+      <a href="forge-competition.html">Конкурс подъездов</a>
+      <a href="#">О проекте</a>
+      <a href="#">Контакты</a>
+    </div>
+    <p style="color:var(--text-muted); font-size:0.8em; margin-top:20px;">© 2026 FORGE / Galaxy Developers. Все права защищены.</p>
+  </div>
+</footer>
+
+</body>
+</html>

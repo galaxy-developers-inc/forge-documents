@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORGE Academy — Модуль 1: Цифровая Уверенность</title>
+<style>
+:root {
+  --primary: #667eea;
+  --primary-dark: #5a67d8;
+  --secondary: #764ba2;
+  --accent: #f5576c;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --bg: #0f0f23;
+  --bg-card: #1a1a2e;
+  --bg-card2: #16213e;
+  --text: #e2e8f0;
+  --text-muted: #94a3b8;
+  --border: #2d3748;
+  --gradient1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --gradient2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  --gradient3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  --gradient4: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Segoe UI',system-ui,-apple-system,sans-serif; background:var(--bg); color:var(--text); line-height:1.7; }
+.container { max-width:900px; margin:0 auto; padding:0 20px; }
+
+/* HEADER */
+.hero { background: var(--gradient1); padding: 60px 0 80px; position:relative; overflow:hidden; text-align:center; }
+.hero::before { content:''; position:absolute; top:0;left:0;right:0;bottom:0; background: url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 5L55 50H5z' fill='none' stroke='white' stroke-opacity='0.05'/%3E%3C/svg%3E"); }
+.hero h1 { font-size:2.8em; font-weight:800; margin-bottom:10px; position:relative; text-shadow:0 2px 20px rgba(0,0,0,0.3); }
+.hero .subtitle { font-size:1.2em; opacity:0.9; position:relative; max-width:600px; margin:0 auto; }
+.hero .badge-line { margin-top:20px; position:relative; }
+.hero .badge-line span { display:inline-block; background:rgba(255,255,255,0.2); padding:5px 16px; border-radius:20px; font-size:0.85em; margin:4px; backdrop-filter:blur(10px); }
+
+/* PROGRESS BAR */
+.progress-section { background:var(--bg-card); padding:20px 0; border-bottom:1px solid var(--border); position:sticky; top:0; z-index:100; }
+.progress-bar-container { background:var(--border); border-radius:10px; height:12px; overflow:hidden; margin-top:8px; }
+.progress-bar { height:100%; background:var(--gradient1); border-radius:10px; transition:width 0.5s ease; width:0%; }
+.progress-info { display:flex; justify-content:space-between; align-items:center; }
+.progress-info .xp { color:var(--warning); font-weight:700; }
+.progress-info .level { color:var(--primary); font-weight:600; }
+
+/* CARDS */
+.lesson-card { background:var(--bg-card); border:1px solid var(--border); border-radius:16px; padding:32px; margin:24px 0; transition:all 0.3s; }
+.lesson-card:hover { border-color:var(--primary); box-shadow:0 0 30px rgba(102,126,234,0.1); }
+.lesson-card.locked { opacity:0.6; pointer-events:none; position:relative; }
+.lesson-card.locked::after { content:'🔒 Завершите предыдущий урок'; position:absolute; top:50%;left:50%; transform:translate(-50%,-50%); background:rgba(0,0,0,0.8); padding:10px 20px; border-radius:8px; font-size:0.9em; }
+.lesson-header { display:flex; align-items:center; gap:16px; margin-bottom:20px; }
+.lesson-number { width:48px;height:48px; background:var(--gradient1); border-radius:12px; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:1.3em; flex-shrink:0; }
+.lesson-header h2 { font-size:1.4em; }
+.lesson-header .duration { font-size:0.8em; color:var(--text-muted); }
+
+/* CONTENT BLOCKS */
+.theory-block { background:var(--bg-card2); border-left:4px solid var(--primary); padding:20px 24px; border-radius:0 12px 12px 0; margin:16px 0; }
+.theory-block h3 { color:var(--primary); margin-bottom:10px; font-size:1.1em; }
+.practice-block { background:rgba(16,185,129,0.08); border:1px solid rgba(16,185,129,0.2); border-radius:12px; padding:20px 24px; margin:16px 0; }
+.practice-block h3 { color:var(--success); margin-bottom:10px; }
+.practice-block h3::before { content:'🎯 '; }
+.reflection-block { background:rgba(245,87,108,0.08); border:1px solid rgba(245,87,108,0.2); border-radius:12px; padding:20px 24px; margin:16px 0; }
+.reflection-block h3 { color:var(--accent); margin-bottom:10px; }
+.reflection-block h3::before { content:'💭 '; }
+
+/* QUIZ */
+.quiz-container { background:var(--bg-card2); border:2px solid var(--primary); border-radius:16px; padding:24px; margin:20px 0; }
+.quiz-container h3 { color:var(--primary); margin-bottom:16px; }
+.quiz-container h3::before { content:'❓ '; }
+.quiz-option { display:block; background:var(--bg-card); border:2px solid var(--border); border-radius:10px; padding:12px 16px; margin:8px 0; cursor:pointer; transition:all 0.2s; width:100%; text-align:left; color:var(--text); font-size:1em; }
+.quiz-option:hover { border-color:var(--primary); background:rgba(102,126,234,0.1); }
+.quiz-option.correct { border-color:var(--success); background:rgba(16,185,129,0.15); }
+.quiz-option.wrong { border-color:var(--accent); background:rgba(245,87,108,0.1); }
+.quiz-feedback { margin-top:12px; padding:12px; border-radius:8px; display:none; }
+.quiz-feedback.show { display:block; }
+
+/* GAMIFICATION */
+.xp-popup { position:fixed; top:20px; right:20px; background:var(--gradient1); padding:12px 24px; border-radius:12px; font-weight:700; font-size:1.1em; z-index:1000; transform:translateY(-100px); opacity:0; transition:all 0.4s ease; }
+.xp-popup.show { transform:translateY(0); opacity:1; }
+.badges-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:16px; margin:20px 0; }
+.badge-item { text-align:center; padding:16px; background:var(--bg-card2); border-radius:12px; border:2px solid var(--border); }
+.badge-item.earned { border-color:var(--warning); box-shadow:0 0 20px rgba(245,158,11,0.2); }
+.badge-item img { width:60px; height:60px; }
+.badge-item p { font-size:0.8em; margin-top:8px; color:var(--text-muted); }
+
+/* SECTION HEADERS */
+.section-divider { text-align:center; padding:40px 0 20px; }
+.section-divider h2 { font-size:2em; font-weight:800; background:var(--gradient1); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.section-divider p { color:var(--text-muted); margin-top:8px; }
+
+/* INTERACTIVE */
+.slider-exercise { margin:16px 0; }
+.slider-exercise input[type="range"] { width:100%; accent-color:var(--primary); }
+.slider-value { text-align:center; font-size:1.5em; font-weight:700; color:var(--primary); margin:8px 0; }
+textarea.reflection-input { width:100%; background:var(--bg); border:1px solid var(--border); border-radius:10px; padding:12px; color:var(--text); font-family:inherit; font-size:0.95em; resize:vertical; min-height:80px; }
+textarea.reflection-input:focus { outline:none; border-color:var(--primary); }
+
+.btn { display:inline-block; padding:12px 28px; border-radius:10px; font-weight:700; cursor:pointer; border:none; font-size:1em; transition:all 0.2s; }
+.btn-primary { background:var(--gradient1); color:white; }
+.btn-primary:hover { transform:translateY(-2px); box-shadow:0 4px 15px rgba(102,126,234,0.4); }
+.btn-success { background:var(--gradient4); color:#0f0f23; }
+.btn-accent { background:var(--gradient2); color:white; }
+
+/* MILESTONE */
+.milestone { text-align:center; padding:40px 20px; background:var(--bg-card); border:2px solid var(--warning); border-radius:16px; margin:30px 0; }
+.milestone h3 { color:var(--warning); font-size:1.4em; margin-bottom:10px; }
+.milestone .reward { display:inline-block; background:rgba(245,158,11,0.15); padding:8px 20px; border-radius:20px; color:var(--warning); font-weight:600; margin-top:10px; }
+
+/* FOOTER */
+.footer { background:var(--bg-card); padding:40px 0; text-align:center; margin-top:40px; border-top:1px solid var(--border); }
+.footer .logo { font-size:1.5em; font-weight:800; background:var(--gradient1); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+
+/* CHECKLIST */
+.checklist { list-style:none; padding:0; }
+.checklist li { padding:8px 0; display:flex; align-items:flex-start; gap:10px; }
+.checklist li::before { content:'☐'; font-size:1.2em; flex-shrink:0; cursor:pointer; }
+.checklist li.checked::before { content:'☑'; color:var(--success); }
+
+/* TOOLTIP */
+.tooltip { position:relative; display:inline; border-bottom:1px dashed var(--primary); cursor:help; }
+.tooltip .tip-text { visibility:hidden; background:var(--bg-card2); border:1px solid var(--primary); color:var(--text); padding:8px 12px; border-radius:8px; position:absolute; z-index:10; bottom:125%; left:50%; transform:translateX(-50%); width:250px; font-size:0.85em; opacity:0; transition:0.2s; }
+.tooltip:hover .tip-text { visibility:visible; opacity:1; }
+
+/* ACCORDION */
+.accordion { border:1px solid var(--border); border-radius:10px; margin:10px 0; overflow:hidden; }
+.accordion-header { background:var(--bg-card2); padding:14px 20px; cursor:pointer; display:flex; justify-content:space-between; align-items:center; font-weight:600; }
+.accordion-header:hover { background:rgba(102,126,234,0.1); }
+.accordion-header::after { content:'▼'; font-size:0.7em; transition:0.3s; }
+.accordion-header.open::after { transform:rotate(180deg); }
+.accordion-body { padding:0 20px; max-height:0; overflow:hidden; transition:max-height 0.3s ease; }
+.accordion-body.open { padding:16px 20px; max-height:2000px; }
+
+/* Stats cards */
+.stats-row { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:16px; margin:20px 0; }
+.stat-card { background:var(--bg-card2); border-radius:12px; padding:20px; text-align:center; }
+.stat-card .number { font-size:2em; font-weight:800; background:var(--gradient1); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.stat-card .label { font-size:0.85em; color:var(--text-muted); margin-top:4px; }
+
+/* Responsive */
+@media(max-width:600px) {
+  .hero h1 { font-size:1.8em; }
+  .lesson-card { padding:20px; }
+  .stats-row { grid-template-columns:1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- XP Popup -->
+<div class="xp-popup" id="xpPopup">+25 XP ⚡</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div style="margin-bottom:20px;">
+      <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIiB3aWR0aD0iODAiIGhlaWdodD0iODAiPgogIDxkZWZzPjxsaW5lYXJHcmFkaWVudCBpZD0iYmciIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiM2NjdlZWEiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiM3NjRiYTIiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz4KICA8Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0OCIgZmlsbD0idXJsKCNiZykiIG9wYWNpdHk9IjAuMTUiLz4KICA8cGF0aCBkPSJNNTAgMTVjLTggMC0xNSA1LTE4IDEyLTUgMS0xMCA2LTEwIDEyIDAgNCAyIDggNSAxMC0xIDItMiA0LTIgNyAwIDYgNCAxMSAxMCAxM3Y4YzAgNCAzIDcgNyA3aDE2YzQgMCA3LTMgNy03di04YzYtMiAxMC03IDEwLTEzIDAtMy0xLTUtMi03IDMtMiA1LTYgNS0xMCAwLTYtNS0xMS0xMC0xMi0zLTctMTAtMTItMTgtMTJ6IiBmaWxsPSJub25lIiBzdHJva2U9IiM2NjdlZWEiIHN0cm9rZS13aWR0aD0iMi41Ii8+CiAgPGNpcmNsZSBjeD0iNDIiIGN5PSI0MiIgcj0iMyIgZmlsbD0iIzc2NGJhMiIvPgogIDxjaXJjbGUgY3g9IjU4IiBjeT0iNDIiIHI9IjMiIGZpbGw9IiM3NjRiYTIiLz4KICA8cGF0aCBkPSJNNDAgNTVjMCAwIDUgOCAyMCAwIiBmaWxsPSJub25lIiBzdHJva2U9IiM3NjRiYTIiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+Cjwvc3ZnPg==" alt="Brain" style="width:80px;height:80px;">
+    </div>
+    <h1>Цифровая Уверенность</h1>
+    <p class="subtitle">Модуль 1 — Научно обоснованная программа развития уверенности в цифровом мире. Основана на теории самоэффективности Бандуры и теории самодетерминации</p>
+    <div class="badge-line">
+      <span>🧠 7 уроков</span>
+      <span>⏱ 2-3 часа</span>
+      <span>🏆 500 XP</span>
+      <span>🎖 4 бейджа</span>
+    </div>
+  </div>
+</section>
+
+<!-- PROGRESS -->
+<section class="progress-section">
+  <div class="container">
+    <div class="progress-info">
+      <span class="level" id="levelDisplay">Уровень 1 — Новичок</span>
+      <span class="xp" id="xpDisplay">0 / 500 XP</span>
+    </div>
+    <div class="progress-bar-container">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+  </div>
+</section>
+
+<!-- INTRO -->
+<div class="container">
+
+<div class="section-divider">
+  <h2>Зачем этот модуль?</h2>
+  <p>Доказано: уверенность в цифровом мире определяет успех больше, чем сами навыки</p>
+</div>
+
+<div class="stats-row">
+  <div class="stat-card">
+    <div class="number">89%</div>
+    <div class="label">рост достижений с геймификацией vs традиционные методы</div>
+  </div>
+  <div class="stat-card">
+    <div class="number">275%</div>
+    <div class="label">улучшение усвоения навыков при интерактивном обучении</div>
+  </div>
+  <div class="stat-card">
+    <div class="number">4</div>
+    <div class="label">источника самоэффективности по Бандуре, все используются в курсе</div>
+  </div>
+</div>
+
+<!-- BADGES COLLECTION -->
+<div class="section-divider">
+  <h2>🎖 Ваши бейджи</h2>
+  <p>Зарабатывайте бейджи по мере прохождения модуля</p>
+</div>
+
+<div class="badges-grid">
+  <div class="badge-item" id="badge1">
+    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4MCA4MCIgd2lkdGg9IjYwIiBoZWlnaHQ9IjYwIj4KICA8Y2lyY2xlIGN4PSI0MCIgY3k9IjQwIiByPSIzNiIgZmlsbD0iIzY2N2VlYSIgb3BhY2l0eT0iMC4xNSIgc3Ryb2tlPSIjNjY3ZWVhIiBzdHJva2Utd2lkdGg9IjIiLz4KICA8dGV4dCB4PSI0MCIgeT0iMzUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMjQiPvCfp608L3RleHQ+CiAgPHRleHQgeD0iNDAiIHk9IjU1IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjgiIGZpbGw9IiM2NjdlZWEiIGZvbnQtd2VpZ2h0PSJib2xkIj5FWFBMT1JFUjwvdGV4dD4KPC9zdmc+" alt="Explorer">
+    <p><strong>Исследователь</strong><br>Пройти уроки 1-2</p>
+  </div>
+  <div class="badge-item" id="badge2">
+    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4MCA4MCIgd2lkdGg9IjYwIiBoZWlnaHQ9IjYwIj4KICA8Y2lyY2xlIGN4PSI0MCIgY3k9IjQwIiByPSIzNiIgZmlsbD0iI2Y1NTc2YyIgb3BhY2l0eT0iMC4xNSIgc3Ryb2tlPSIjZjU1NzZjIiBzdHJva2Utd2lkdGg9IjIiLz4KICA8dGV4dCB4PSI0MCIgeT0iMzUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMjQiPvCfkqE8L3RleHQ+CiAgPHRleHQgeD0iNDAiIHk9IjU1IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjgiIGZpbGw9IiNmNTU3NmMiIGZvbnQtd2VpZ2h0PSJib2xkIj5USElOS0VSPC90ZXh0Pgo8L3N2Zz4=" alt="Thinker">
+    <p><strong>Мыслитель</strong><br>Пройти уроки 3-4</p>
+  </div>
+  <div class="badge-item" id="badge3">
+    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4MCA4MCIgd2lkdGg9IjYwIiBoZWlnaHQ9IjYwIj4KICA8Y2lyY2xlIGN4PSI0MCIgY3k9IjQwIiByPSIzNiIgZmlsbD0iIzQzZTk3YiIgb3BhY2l0eT0iMC4xNSIgc3Ryb2tlPSIjNDNlOTdiIiBzdHJva2Utd2lkdGg9IjIiLz4KICA8dGV4dCB4PSI0MCIgeT0iMzUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMjQiPvCflKg8L3RleHQ+CiAgPHRleHQgeD0iNDAiIHk9IjU1IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjgiIGZpbGw9IiM0M2U5N2IiIGZvbnQtd2VpZ2h0PSJib2xkIj5CVUlMREVSPC90ZXh0Pgo8L3N2Zz4=" alt="Builder">
+    <p><strong>Строитель</strong><br>Пройти уроки 5-6</p>
+  </div>
+  <div class="badge-item" id="badge4">
+    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4MCA4MCIgd2lkdGg9IjYwIiBoZWlnaHQ9IjYwIj4KICA8Y2lyY2xlIGN4PSI0MCIgY3k9IjQwIiByPSIzNiIgZmlsbD0iIzc2NGJhMiIgb3BhY2l0eT0iMC4xNSIgc3Ryb2tlPSIjNzY0YmEyIiBzdHJva2Utd2lkdGg9IjIiLz4KICA8dGV4dCB4PSI0MCIgeT0iMzUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMjQiPvCfkZE8L3RleHQ+CiAgPHRleHQgeD0iNDAiIHk9IjU1IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjgiIGZpbGw9IiM3NjRiYTIiIGZvbnQtd2VpZ2h0PSJib2xkIj5NQVNURVI8L3RleHQ+Cjwvc3ZnPg==" alt="Master">
+    <p><strong>Мастер</strong><br>Завершить модуль</p>
+  </div>
+</div>
+
+<!-- ============= УРОК 1 ============= -->
+<div class="lesson-card" id="lesson1" data-xp="0">
+  <div class="lesson-header">
+    <div class="lesson-number">1</div>
+    <div>
+      <h2>Что такое цифровая уверенность?</h2>
+      <div class="duration">⏱ 15 мин · 🏆 50 XP</div>
+    </div>
+  </div>
+
+  <div class="theory-block">
+    <h3>Теория самоэффективности Бандуры</h3>
+    <p>Альберт Бандура определил <strong>самоэффективность</strong> как «убеждённость человека в своей способности выполнить конкретную задачу». Это не абстрактная уверенность в себе — это конкретная вера: «Я <em>могу</em> это сделать».</p>
+    <p style="margin-top:12px;">Исследования показывают: именно цифровая самоэффективность (а не сами навыки) определяет готовность к работе в цифровом мире. Навыки без уверенности = знания, которые не используются.</p>
+    <p style="margin-top:12px;"><strong>4 источника самоэффективности:</strong></p>
+    <ul style="margin-top:8px; padding-left:20px;">
+      <li><strong>Опыт мастерства</strong> — вы сделали это сами и получилось ✅</li>
+      <li><strong>Наблюдение за другими</strong> — если они смогли, значит и я могу 👀</li>
+      <li><strong>Вербальное убеждение</strong> — когда вам говорят: «У тебя получится» 💬</li>
+      <li><strong>Эмоциональное состояние</strong> — спокойствие помогает, тревога мешает 🧘</li>
+    </ul>
+  </div>
+
+  <div class="theory-block">
+    <h3>Теория самодетерминации (Деси и Райан)</h3>
+    <p>Внутренняя мотивация расцветает, когда удовлетворены три базовые потребности:</p>
+    <ul style="margin-top:8px; padding-left:20px;">
+      <li><strong>Автономия</strong> — чувство выбора и контроля над своими действиями</li>
+      <li><strong>Компетентность</strong> — ощущение эффективности и мастерства</li>
+      <li><strong>Связанность</strong> — чувство принадлежности к сообществу</li>
+    </ul>
+    <p style="margin-top:12px;">В этом модуле каждый урок спроектирован так, чтобы подпитывать все три потребности. Вы <em>выбираете</em> темп, <em>видите</em> свой прогресс и <em>делитесь</em> с сообществом.</p>
+  </div>
+
+  <div class="practice-block">
+    <h3>Практика: Замерьте свой старт</h3>
+    <p>Оцените свою текущую цифровую уверенность от 1 до 10:</p>
+    <div class="slider-exercise">
+      <input type="range" min="1" max="10" value="5" id="confidenceSlider" oninput="document.getElementById('confValue').textContent=this.value">
+      <div class="slider-value" id="confValue">5</div>
+    </div>
+    <p style="font-size:0.9em; color:var(--text-muted);">Запомните это число. В конце модуля мы замерим снова — и вы увидите разницу.</p>
+  </div>
+
+  <div class="reflection-block">
+    <h3>Рефлексия</h3>
+    <p>Вспомните момент, когда вы чувствовали себя максимально уверенно с технологиями. Что это было? Почему именно тогда?</p>
+    <textarea class="reflection-input" placeholder="Напишите здесь..."></textarea>
+  </div>
+
+  <div class="quiz-container">
+    <h3>Проверка понимания</h3>
+    <p>Что является самым мощным источником самоэффективности по Бандуре?</p>
+    <button class="quiz-option" onclick="checkQuiz(this, true, 'q1')">A) Личный опыт успеха (опыт мастерства)</button>
+    <button class="quiz-option" onclick="checkQuiz(this, false, 'q1')">B) Комплименты от друзей</button>
+    <button class="quiz-option" onclick="checkQuiz(this, false, 'q1')">C) Наблюдение за блогерами</button>
+    <button class="quiz-option" onclick="checkQuiz(this, false, 'q1')">D) Медитация</button>
+    <div class="quiz-feedback" id="q1-feedback"></div>
+  </div>
+
+  <button class="btn btn-primary" onclick="completeLesson(1, 50)" id="completeBtn1">Завершить урок 1 →</button>
+</div>
+
+<!-- ============= УРОК 2 ============= -->
+<div class="lesson-card" id="lesson2">
+  <div class="lesson-header">
+    <div class="lesson-number">2</div>
+    <div>
+      <h2>Микро-мастерство: маленькие победы = большая уверенность</h2>
+      <div class="duration">⏱ 20 мин · 🏆 75 XP</div>
+    </div>
+  </div>
+
+  <div class="theory-block">
+    <h3>Наука маленьких побед</h3>
+    <p>Когда вы выполняете небольшую задачу и получаете <strong>немедленную обратную связь</strong> об успехе, мозг выделяет дофамин. Этот нейромедиатор создаёт петлю подкрепления: «Я сделал → Получилось → Хочу ещё».</p>
+    <p style="margin-top:12px;">Концепция <strong>микро-мастерства</strong> — это разделение сложного навыка на маленькие, достижимые шаги. Каждый шаг — это чистый, однозначный сигнал мозгу: «Ты справился». Постепенное накопление таких сигналов меняет внутренний диалог с «я не могу» на «я уже это делал и могу снова».</p>
+  </div>
+
+  <div class="theory-block">
+    <h3>Метод Octalysis: 8 драйверов мотивации</h3>
+    <p>Фреймворк Ю-Кай Чоу описывает 8 ключевых мотиваторов поведения:</p>
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-top:12px;">
+      <div style="padding:8px; background:rgba(102,126,234,0.1); border-radius:8px;">🏔 <strong>Эпическое значение</strong> — «Я часть чего-то большего»</div>
+      <div style="padding:8px; background:rgba(102,126,234,0.1); border-radius:8px;">📈 <strong>Развитие</strong> — видимый прогресс и рост</div>
+      <div style="padding:8px; background:rgba(102,126,234,0.1); border-radius:8px;">🎨 <strong>Творчество</strong> — свобода выбора и обратная связь</div>
+      <div style="padding:8px; background:rgba(102,126,234,0.1); border-radius:8px;">🏠 <strong>Обладание</strong> — ощущение владения результатом</div>
+      <div style="padding:8px; background:rgba(102,126,234,0.1); border-radius:8px;">👥 <strong>Социальность</strong> — влияние сообщества</div>
+      <div style="padding:8px; background:rgba(102,126,234,0.1); border-radius:8px;">⏳ <strong>Дефицит</strong> — ограниченные предложения</div>
+      <div style="padding:8px; background:rgba(102,126,234,0.1); border-radius:8px;">🎲 <strong>Непредсказуемость</strong> — приятные сюрпризы</div>
+      <div style="padding:8px; background:rgba(102,126,234,0.1); border-radius:8px;">🛡 <strong>Избегание потерь</strong> — не хочу потерять прогресс</div>
+    </div>
+    <p style="margin-top:12px; color:var(--text-muted); font-size:0.9em;">Все 8 драйверов встроены в этот модуль. Вы уже набираете XP (Развитие), получаете бейджи (Обладание), и участвуете в общем движении (Эпическое значение).</p>
+  </div>
+
+  <div class="practice-block">
+    <h3>Практика: Цепочка микро-побед</h3>
+    <p>Выполните 5 простых действий и отмечайте галочкой. Каждое занимает менее 1 минуты:</p>
+    <ul class="checklist" id="microWins">
+      <li onclick="toggleCheck(this)">Откройте настройки телефона и найдите версию операционной системы</li>
+      <li onclick="toggleCheck(this)">Создайте новую папку на рабочем столе и назовите её «FORGE»</li>
+      <li onclick="toggleCheck(this)">Сделайте скриншот этого экрана и сохраните его</li>
+      <li onclick="toggleCheck(this)">Откройте поисковик и найдите «Теория самоэффективности Бандуры»</li>
+      <li onclick="toggleCheck(this)">Отправьте себе сообщение: «Я учусь и расту каждый день»</li>
+    </ul>
+    <p style="margin-top:12px; font-size:0.9em;">Заметьте: каждая отмеченная галочка — это микро-победа. Мозг фиксирует: «Я действую, у меня получается».</p>
+  </div>
+
+  <div class="quiz-container">
+    <h3>Проверка понимания</h3>
+    <p>Почему маленькие задачи эффективнее больших для развития уверенности?</p>
+    <button class="quiz-option" onclick="checkQuiz(this, false, 'q2')">A) Потому что маленькие задачи не требуют усилий</button>
+    <button class="quiz-option" onclick="checkQuiz(this, true, 'q2')">B) Каждый маленький успех создаёт дофаминовую петлю подкрепления</button>
+    <button class="quiz-option" onclick="checkQuiz(this, false, 'q2')">C) Большие задачи вообще не развивают уверенность</button>
+    <button class="quiz-option" onclick="checkQuiz(this, false, 'q2')">D) Это не подтверждено наукой</button>
+    <div class="quiz-feedback" id="q2-feedback"></div>
+  </div>
+
+  <button class="btn btn-primary" onclick="completeLesson(2, 75)" id="completeBtn2">Завершить урок 2 →</button>
+</div>
+
+<!-- MILESTONE 1 -->
+<div class="milestone" id="milestone1" style="display:none;">
+  <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4MCA4MCIgd2lkdGg9IjYwIiBoZWlnaHQ9IjYwIj4KICA8Y2lyY2xlIGN4PSI0MCIgY3k9IjQwIiByPSIzNiIgZmlsbD0iIzY2N2VlYSIgb3BhY2l0eT0iMC4xNSIgc3Ryb2tlPSIjNjY3ZWVhIiBzdHJva2Utd2lkdGg9IjIiLz4KICA8dGV4dCB4PSI0MCIgeT0iMzUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMjQiPvCfp608L3RleHQ+CiAgPHRleHQgeD0iNDAiIHk9IjU1IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjgiIGZpbGw9IiM2NjdlZWEiIGZvbnQtd2VpZ2h0PSJib2xkIj5FWFBMT1JFUjwvdGV4dD4KPC9zdmc+" alt="Explorer Badge" style="width:80px;">
+  <h3>🎉 Бейдж получен: Исследователь!</h3>
+  <p>Вы завершили первые два урока и заложили научную основу.</p>
+  <div class="reward">+50 бонусных XP</div>
+</div>
+
+<!-- ============= УРОК 3 ============= -->
+<div class="lesson-card" id="lesson3">
+  <div class="lesson-header">
+    <div class="lesson-number">3</div>
+    <div>
+      <h2>Growth Mindset: мышление роста</h2>
+      <div class="duration">⏱ 20 мин · 🏆 75 XP</div>
+    </div>
+  </div>
+
+  <div class="theory-block">
+    <h3>Фиксированное vs Растущее мышление (Кэрол Двек)</h3>
+    <p>Профессор Стэнфорда Кэрол Двек выделила два типа мышления:</p>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:16px;">
+      <div style="background:rgba(245,87,108,0.1); border:1px solid rgba(245,87,108,0.3); border-radius:12px; padding:16px;">
+        <p style="text-align:center; font-size:1.5em;">🔴</p>
+        <p><strong>Фиксированное</strong></p>
+        <ul style="font-size:0.9em; padding-left:16px; margin-top:8px;">
+          <li>«Я либо умный, либо нет»</li>
+          <li>Ошибки = провал</li>
+          <li>Избегает вызовов</li>
+          <li>Критика — угроза</li>
+        </ul>
+      </div>
+      <div style="background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.3); border-radius:12px; padding:16px;">
+        <p style="text-align:center; font-size:1.5em;">🟢</p>
+        <p><strong>Растущее</strong></p>
+        <ul style="font-size:0.9em; padding-left:16px; margin-top:8px;">
+          <li>«Я могу развиваться»</li>
+          <li>Ошибки = обучение</li>
+          <li>Принимает вызовы</li>
+          <li>Критика — информация</li>
+        </ul>
+      </div>
+    </div>
+    <p style="margin-top:16px;">Ключевое открытие: мышление — это не врождённая черта. Его можно изменить через осознанную практику. Нейропластичность мозга позволяет формировать новые нейронные связи в любом возрасте.</p>
+  </div>
+
+  <div class="practice-block">
+    <h3>Практика: Перезагрузка внутреннего диалога</h3>
+    <p>Замените фиксированные мысли на растущие. Напишите свою «перезагруженную» версию:</p>
+    <div style="margin:12px 0;">
+      <p style="color:var(--accent);">❌ «У меня нет таланта к технологиям»</p>
+      <textarea class="reflection-input" placeholder="Ваша перезагрузка: Например, 'Я пока не освоил это, но каждый день учусь...'"></textarea>
+    </div>
+    <div style="margin:12px 0;">
+      <p style="color:var(--accent);">❌ «Это слишком сложно для меня»</p>
+      <textarea class="reflection-input" placeholder="Ваша перезагрузка..."></textarea>
+    </div>
+    <div style="margin:12px 0;">
+      <p style="color:var(--accent);">❌ «Молодёжь всё равно лучше разбирается»</p>
+      <textarea class="reflection-input" placeholder="Ваша перезагрузка..."></textarea>
+    </div>
+  </div>
+
+  <div class="quiz-container">
+    <h3>Проверка понимания</h3>
+    <p>Человек с растущим мышлением после ошибки скажет:</p>
+    <button class="quiz-option" onclick="checkQuiz(this, false, 'q3')">A) «Видимо, это не моё»</button>
+    <button class="quiz-option" onclick="checkQuiz(this, false, 'q3')">B) «Надо найти виноватого»</button>
+    <button class="quiz-option" onclick="checkQuiz(this, true, 'q3')">C) «Интересно, что я могу сделать по-другому в следующий раз?»</button>
+    <button class="quiz-option" onclick="checkQuiz(this, false, 'q3')">D) «Больше не буду пробовать»</button>
+    <div class="quiz-feedback" id="q3-feedback"></div>
+  </div>
+
+  <button class="btn btn-primary" onclick="completeLesson(3, 75)" id="completeBtn3">Завершить урок 3 →</button>
+</div>
+
+<!-- ============= УРОК 4 ============= -->
+<div class="lesson-card" id="lesson4">
+  <div class="lesson-header">
+    <div class="lesson-number">4</div>
+    <div>
+      <h2>Управление тревогой и цифровым стрессом</h2>
+      <div class="duration">⏱ 20 мин · 🏆 75 XP</div>
+    </div>
+  </div>
+
+  <div class="theory-block">
+    <h3>Когнитивно-поведенческий подход (CBT)</h3>
+    <p>Когнитивно-поведенческая терапия — золотой стандарт работы с тревогой. Её цифровая версия (iCBT) доказала сопоставимую эффективность с очным форматом.</p>
+    <p style="margin-top:12px;"><strong>Треугольник CBT:</strong></p>
+    <div style="text-align:center; margin:16px 0; padding:20px; background:var(--bg); border-radius:12px;">
+      <p style="font-size:1.3em; font-weight:700; color:var(--primary);">🧠 МЫСЛИ</p>
+      <p style="font-size:1.5em;">↙ ↘</p>
+      <p style="display:flex; justify-content:space-between; max-width:300px; margin:0 auto;">
+        <span style="font-size:1.1em; font-weight:700; color:var(--accent);">💓 ЧУВСТВА</span>
+        <span style="font-size:1.1em; font-weight:700; color:var(--success);">⚡ ДЕЙСТВИЯ</span>
+      </p>
+      <p style="font-size:1.5em;">↖ ↗</p>
+    </div>
+    <p>Мысли влияют на чувства, чувства — на действия, действия — на мысли. Изменив одно звено, вы меняете всю цепочку.</p>
+  </div>
+
+  <div class="theory-block">
+    <h3>Типичные когнитивные искажения</h3>
+    <div class="accordion">
+      <div class="accordion-header" onclick="toggleAccordion(this)">Катастрофизация</div>
+      <div class="accordion-body">«Я нажму не ту кнопку — и всё сломается навсегда!» На самом деле: большинство цифровых действий обратимы. Ctrl+Z — ваш лучший друг.</div>
+    </div>
+    <div class="accordion">
+      <div class="accordion-header" onclick="toggleAccordion(this)">Чтение мыслей</div>
+      <div class="accordion-body">«Все видят, что я не умею пользоваться компьютером». На самом деле: большинство людей заняты своими задачами и не следят за вами.</div>
+    </div>
+    <div class="accordion">
+      <div class="accordion-header" onclick="toggleAccordion(this)">Чёрно-белое мышление</div>
+      <div class="accordion-body">«Если я не эксперт — значит я полный ноль». На самом деле: между нулём и экспертом есть бесконечное количество уровней, и каждый уровень ценен.</div>
+    </div>
+    <div class="accordion">
+      <div class="accordion-header" onclick="toggleAccordion(this)">Обесценивание успехов</div>
+      <div class="accordion-body">«Подумаешь, файл отправил. Это любой может». На самом деле: каждое новое действие — это навык, который вы не имели раньше.</div>
+    </div>
+  </div>
+
+  <div class="practice-block">
+    <h3>Практика: Дневник перезагрузки мыслей</h3>
+    <p>Вспомните ситуацию, когда вы чувствовали тревогу из-за технологий:</p>
+    <p style="margin-top:10px;"><strong>Ситуация:</strong></p>
+    <textarea class="reflection-input" placeholder="Что произошло?"></textarea>
+    <p style="margin-top:10px;"><strong>Автоматическая мысль:</strong></p>
+    <textarea class="reflection-input" placeholder="Что вы подумали?"></textarea>
+    <p style="margin-top:10px;"><strong>Альтернативная мысль:</strong></p>
+    <textarea class="reflection-input" placeholder="Как ещё можно на это посмотреть?"></textarea>
+  </div>
+
+  <div class="quiz-container">
+    <h3>Проверка понимания</h3>
+    <p>Катастрофизация — это когда мы:</p>
+    <button class="quiz-option" onclick="checkQuiz(this, false, 'q4')">A) Реалистично оцениваем риски</button>
+    <button class="quiz-option" onclick="checkQuiz(this, true, 'q4')">B) Представляем наихудший исход как наиболее вероятный</button>
+    <button class="quiz-option" onclick="checkQuiz(this, false, 'q4')">C) Игнорируем проблемы</button>
+    <button class="quiz-option" onclick="checkQuiz(this, false, 'q4')">D) Просим других решить за нас</button>
+    <div class="quiz-feedback" id="q4-feedback"></div>
+  </div>
+
+  <button class="btn btn-primary" onclick="completeLesson(4, 75)" id="completeBtn4">Завершить урок 4 →</button>
+</div>
+
+<!-- MILESTONE 2 -->
+<div class="milestone" id="milestone2" style="display:none;">
+  <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4MCA4MCIgd2lkdGg9IjYwIiBoZWlnaHQ9IjYwIj4KICA8Y2lyY2xlIGN4PSI0MCIgY3k9IjQwIiByPSIzNiIgZmlsbD0iI2Y1NTc2YyIgb3BhY2l0eT0iMC4xNSIgc3Ryb2tlPSIjZjU1NzZjIiBzdHJva2Utd2lkdGg9IjIiLz4KICA8dGV4dCB4PSI0MCIgeT0iMzUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMjQiPvCfkqE8L3RleHQ+CiAgPHRleHQgeD0iNDAiIHk9IjU1IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjgiIGZpbGw9IiNmNTU3NmMiIGZvbnQtd2VpZ2h0PSJib2xkIj5USElOS0VSPC90ZXh0Pgo8L3N2Zz4=" alt="Thinker Badge" style="width:80px;">
+  <h3>🎉 Бейдж получен: Мыслитель!</h3>
+  <p>Вы освоили научные основы мышления роста и работы с тревогой.</p>
+  <div class="reward">+75 бонусных XP</div>
+</div>
+
+<!-- ============= УРОК 5 ============= -->
+<div class="lesson-card" id="lesson5">
+  <div class="lesson-header">
+    <div class="lesson-number">5</div>
+    <div>
+      <h2>Цифровые навыки на практике: безопасная среда</h2>
+      <div class="duration">⏱ 25 мин · 🏆 75 XP</div>
+    </div>
+  </div>
+
+  <div class="theory-block">
+    <h3>Симуляции и безопасное пространство для ошибок</h3>
+    <p>Цифровая среда обучения — это «лаборатория», где ошибки приватны, бесплатны и сразу обучают. Этот уникальный «контейнер» позволяет безопасно тестировать свои границы — а именно это является фундаментальным механизмом построения настоящей уверенности.</p>
+    <p style="margin-top:12px;">Ключевой принцип: <strong>не теория, а действие</strong>. Каждая минута практики стоит часа чтения.</p>
+  </div>
+
+  <div class="practice-block">
+    <h3>Практика: Мини-челленджи (выполните минимум 3 из 5)</h3>
+    <ul class="checklist" id="challenges">
+      <li onclick="toggleCheck(this)"><strong>Безопасность:</strong> Проверьте свой email — есть ли письма от неизвестных? Не открывайте вложения, просто найдите и отметьте как спам</li>
+      <li onclick="toggleCheck(this)"><strong>Коммуникация:</strong> Отправьте сообщение другу с фотографией и подписью через любой мессенджер</li>
+      <li onclick="toggleCheck(this)"><strong>Навигация:</strong> Найдите через карты (Яндекс/Google) ближайший парк и проложите маршрут пешком</li>
+      <li onclick="toggleCheck(this)"><strong>Организация:</strong> Создайте заметку на телефоне с вашими 3 целями на неделю</li>
+      <li onclick="toggleCheck(this)"><strong>Творчество:</strong> Сделайте фото чего-то красивого рядом и добавьте текст/фильтр</li>
+    </ul>
+  </div>
+
+  <div class="reflection-block">
+    <h3>Рефлексия после практики</h3>
+    <p>Что было самым лёгким? Что удивило? Что хотите попробовать ещё?</p>
+    <textarea class="reflection-input" placeholder="Ваши наблюдения..."></textarea>
+  </div>
+
+  <button class="btn btn-primary" onclick="completeLesson(5, 75)" id="completeBtn5">Завершить урок 5 →</button>
+</div>
+
+<!-- ============= УРОК 6 ============= -->
+<div class="lesson-card" id="lesson6">
+  <div class="lesson-header">
+    <div class="lesson-number">6</div>
+    <div>
+      <h2>Сила сообщества: вместе сильнее</h2>
+      <div class="duration">⏱ 15 мин · 🏆 50 XP</div>
+    </div>
+  </div>
+
+  <div class="theory-block">
+    <h3>Социальное влияние и мотивация</h3>
+    <p>Согласно теории самодетерминации, <strong>связанность</strong> — третья базовая потребность. Когда мы чувствуем себя частью сообщества, мотивация и уверенность растут многократно.</p>
+    <p style="margin-top:12px;">Именно поэтому FORGE — это не просто платформа, а <strong>движение</strong>. Когда вы видите, что ваши соседи тоже учатся и действуют — это работает как «наблюдение за другими» из теории Бандуры.</p>
+  </div>
+
+  <div class="theory-block">
+    <h3>Конкурс «Лучший подъезд FORGE»</h3>
+    <p>Мы запускаем конкурс, который объединит обучение и реальные действия. Ваша задача — применить новую уверенность для реального изменения вашего пространства.</p>
+    <p style="margin-top:12px;"><strong>Почему это работает:</strong></p>
+    <ul style="padding-left:20px; margin-top:8px;">
+      <li>Опыт мастерства → реальный проект, реальный результат</li>
+      <li>Наблюдение → вы видите проекты других участников</li>
+      <li>Социальное подкрепление → голосование и поддержка сообщества</li>
+      <li>Эмоциональный подъём → гордость за своё пространство</li>
+    </ul>
+    <p style="margin-top:12px; background:rgba(245,158,11,0.1); padding:12px; border-radius:8px; border-left:3px solid var(--warning);">
+      🏆 <strong>Все, кто завершил Модуль 1 — автоматически допускаются к участию в конкурсе «Лучший подъезд FORGE»</strong>
+    </p>
+  </div>
+
+  <div class="practice-block">
+    <h3>Практика: План действий</h3>
+    <p>Напишите 3 конкретных идеи, что можно улучшить в вашем подъезде или дворе:</p>
+    <textarea class="reflection-input" placeholder="1. &#10;2. &#10;3. "></textarea>
+  </div>
+
+  <button class="btn btn-primary" onclick="completeLesson(6, 50)" id="completeBtn6">Завершить урок 6 →</button>
+</div>
+
+<!-- MILESTONE 3 -->
+<div class="milestone" id="milestone3" style="display:none;">
+  <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4MCA4MCIgd2lkdGg9IjYwIiBoZWlnaHQ9IjYwIj4KICA8Y2lyY2xlIGN4PSI0MCIgY3k9IjQwIiByPSIzNiIgZmlsbD0iIzQzZTk3YiIgb3BhY2l0eT0iMC4xNSIgc3Ryb2tlPSIjNDNlOTdiIiBzdHJva2Utd2lkdGg9IjIiLz4KICA8dGV4dCB4PSI0MCIgeT0iMzUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMjQiPvCflKg8L3RleHQ+CiAgPHRleHQgeD0iNDAiIHk9IjU1IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjgiIGZpbGw9IiM0M2U5N2IiIGZvbnQtd2VpZ2h0PSJib2xkIj5CVUlMREVSPC90ZXh0Pgo8L3N2Zz4=" alt="Builder Badge" style="width:80px;">
+  <h3>🎉 Бейдж получен: Строитель!</h3>
+  <p>Вы готовы применять знания в реальном мире!</p>
+  <div class="reward">+75 бонусных XP</div>
+</div>
+
+<!-- ============= УРОК 7 ============= -->
+<div class="lesson-card" id="lesson7">
+  <div class="lesson-header">
+    <div class="lesson-number">7</div>
+    <div>
+      <h2>Финальный урок: Ваш новый уровень</h2>
+      <div class="duration">⏱ 15 мин · 🏆 100 XP</div>
+    </div>
+  </div>
+
+  <div class="theory-block">
+    <h3>Подведение итогов</h3>
+    <p>За этот модуль вы:</p>
+    <ul style="padding-left:20px;">
+      <li>Узнали научную основу уверенности (Бандура, Двек, Деси & Райан)</li>
+      <li>Освоили технику микро-мастерства</li>
+      <li>Научились распознавать и менять когнитивные искажения</li>
+      <li>Практиковали реальные цифровые навыки в безопасной среде</li>
+      <li>Подготовились к участию в конкурсе «Лучший подъезд FORGE»</li>
+    </ul>
+  </div>
+
+  <div class="practice-block">
+    <h3>Финальный замер: как изменилась ваша уверенность?</h3>
+    <p>Оцените свою цифровую уверенность от 1 до 10 (вспомните свой начальный замер!):</p>
+    <div class="slider-exercise">
+      <input type="range" min="1" max="10" value="7" id="finalSlider" oninput="document.getElementById('finalValue').textContent=this.value">
+      <div class="slider-value" id="finalValue">7</div>
+    </div>
+  </div>
+
+  <div class="reflection-block">
+    <h3>Финальная рефлексия</h3>
+    <p>Что стало главным инсайтом этого модуля для вас?</p>
+    <textarea class="reflection-input" placeholder="Мой главный инсайт..."></textarea>
+    <p style="margin-top:12px;">Что вы планируете сделать по-другому уже завтра?</p>
+    <textarea class="reflection-input" placeholder="Мой план..."></textarea>
+  </div>
+
+  <button class="btn btn-accent" onclick="completeModule()" id="completeBtnFinal">🏆 Завершить Модуль 1 и получить доступ к конкурсу</button>
+</div>
+
+<!-- FINAL MILESTONE -->
+<div class="milestone" id="milestoneFinal" style="display:none;">
+  <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA4MCA4MCIgd2lkdGg9IjYwIiBoZWlnaHQ9IjYwIj4KICA8Y2lyY2xlIGN4PSI0MCIgY3k9IjQwIiByPSIzNiIgZmlsbD0iIzc2NGJhMiIgb3BhY2l0eT0iMC4xNSIgc3Ryb2tlPSIjNzY0YmEyIiBzdHJva2Utd2lkdGg9IjIiLz4KICA8dGV4dCB4PSI0MCIgeT0iMzUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMjQiPvCfkZE8L3RleHQ+CiAgPHRleHQgeD0iNDAiIHk9IjU1IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjgiIGZpbGw9IiM3NjRiYTIiIGZvbnQtd2VpZ2h0PSJib2xkIj5NQVNURVI8L3RleHQ+Cjwvc3ZnPg==" alt="Master Badge" style="width:100px;">
+  <h3>🎊 Поздравляем! Вы — Мастер цифровой уверенности!</h3>
+  <p style="font-size:1.1em; margin:16px 0;">Вы завершили Модуль 1 и получили все 4 бейджа.</p>
+  <div class="reward" style="font-size:1.2em;">500+ XP заработано</div>
+  <div style="margin-top:20px;">
+    <p>🎯 Ваши награды:</p>
+    <ul style="list-style:none; padding:0; margin-top:12px;">
+      <li style="padding:8px 0;">✅ Допуск к конкурсу «Лучший подъезд FORGE»</li>
+      <li style="padding:8px 0;">✅ Сертификат о прохождении Модуля 1</li>
+      <li style="padding:8px 0;">✅ Скидка 50% на Модуль 2: «Цифровые инструменты»</li>
+      <li style="padding:8px 0;">✅ Членство в сообществе FORGE Galaxy</li>
+    </ul>
+  </div>
+  <div style="margin-top:24px;">
+    <a href="forge-competition.html" class="btn btn-accent" style="text-decoration:none;">🏠 Перейти к конкурсу «Лучший подъезд» →</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="container">
+    <div class="logo">FORGE Academy</div>
+    <p style="color:var(--text-muted); margin-top:8px;">Образовательный портал Galaxy Developers</p>
+    <p style="color:var(--text-muted); font-size:0.85em; margin-top:16px;">Модуль основан на: Теория самоэффективности (Bandura, 1997) · Теория самодетерминации (Deci & Ryan, 2000) · Growth Mindset (Dweck, 2006) · Octalysis Framework (Chou, 2015) · Когнитивно-поведенческая терапия (Beck, 1979)</p>
+  </div>
+</div>
+
+</div><!-- container -->
+
+<script>
+// Gamification State
+let totalXP = 0;
+let completedLessons = new Set();
+const maxXP = 500;
+
+function showXP(amount) {
+  const popup = document.getElementById('xpPopup');
+  popup.textContent = '+' + amount + ' XP ⚡';
+  popup.classList.add('show');
+  setTimeout(() => popup.classList.remove('show'), 2000);
+}
+
+function updateProgress() {
+  const pct = Math.min((totalXP / maxXP) * 100, 100);
+  document.getElementById('progressBar').style.width = pct + '%';
+  document.getElementById('xpDisplay').textContent = totalXP + ' / ' + maxXP + ' XP';
+
+  let level = 'Уровень 1 — Новичок';
+  if (totalXP >= 400) level = 'Уровень 5 — Мастер';
+  else if (totalXP >= 300) level = 'Уровень 4 — Строитель';
+  else if (totalXP >= 200) level = 'Уровень 3 — Мыслитель';
+  else if (totalXP >= 100) level = 'Уровень 2 — Исследователь';
+  document.getElementById('levelDisplay').textContent = level;
+}
+
+function completeLesson(num, xp) {
+  if (completedLessons.has(num)) return;
+  completedLessons.add(num);
+  totalXP += xp;
+  showXP(xp);
+  updateProgress();
+
+  const btn = document.getElementById('completeBtn' + num);
+  btn.textContent = '✅ Урок ' + num + ' завершён!';
+  btn.style.background = 'var(--success)';
+  btn.style.cursor = 'default';
+
+  // Check milestones
+  if (completedLessons.has(1) && completedLessons.has(2)) {
+    document.getElementById('milestone1').style.display = 'block';
+    document.getElementById('badge1').classList.add('earned');
+    totalXP += 50;
+    updateProgress();
+  }
+  if (completedLessons.has(3) && completedLessons.has(4)) {
+    document.getElementById('milestone2').style.display = 'block';
+    document.getElementById('badge2').classList.add('earned');
+    totalXP += 75;
+    updateProgress();
+  }
+  if (completedLessons.has(5) && completedLessons.has(6)) {
+    document.getElementById('milestone3').style.display = 'block';
+    document.getElementById('badge3').classList.add('earned');
+    totalXP += 75;
+    updateProgress();
+  }
+
+  // Scroll to next
+  setTimeout(() => {
+    const next = document.getElementById('lesson' + (num + 1)) || document.getElementById('milestone' + Math.ceil(num/2));
+    if (next) next.scrollIntoView({ behavior:'smooth', block:'start' });
+  }, 500);
+}
+
+function completeModule() {
+  if (!completedLessons.has(7)) {
+    completedLessons.add(7);
+    totalXP += 100;
+    showXP(100);
+    updateProgress();
+    document.getElementById('milestoneFinal').style.display = 'block';
+    document.getElementById('badge4').classList.add('earned');
+    document.getElementById('completeBtnFinal').textContent = '✅ Модуль завершён!';
+    document.getElementById('completeBtnFinal').style.background = 'var(--success)';
+    setTimeout(() => {
+      document.getElementById('milestoneFinal').scrollIntoView({ behavior:'smooth' });
+    }, 500);
+  }
+}
+
+function checkQuiz(el, correct, qId) {
+  const container = el.parentElement;
+  const options = container.querySelectorAll('.quiz-option');
+  const feedback = document.getElementById(qId + '-feedback');
+
+  options.forEach(o => { o.disabled = true; o.style.pointerEvents='none'; });
+
+  if (correct) {
+    el.classList.add('correct');
+    feedback.innerHTML = '✅ <strong>Правильно!</strong> Отличная работа!';
+    feedback.style.background = 'rgba(16,185,129,0.15)';
+    feedback.style.color = 'var(--success)';
+    totalXP += 10;
+    showXP(10);
+    updateProgress();
+  } else {
+    el.classList.add('wrong');
+    options.forEach(o => { if (o.onclick && o.onclick.toString().includes('true')) o.classList.add('correct'); });
+    feedback.innerHTML = '❌ Не совсем. Правильный ответ подсвечен зелёным. Перечитайте теорию выше!';
+    feedback.style.background = 'rgba(245,87,108,0.1)';
+    feedback.style.color = 'var(--accent)';
+  }
+  feedback.classList.add('show');
+}
+
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+}
+
+function toggleAccordion(el) {
+  el.classList.toggle('open');
+  el.nextElementSibling.classList.toggle('open');
+}
+</script>
+</body>
+</html>

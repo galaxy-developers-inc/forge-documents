@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORGE — Молодежное движение Горна</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Caveat:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a0a;color:#f0e6d3;font-family:'Montserrat',sans-serif;overflow-x:hidden}
+.hero{position:relative;width:100%;min-height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;background:radial-gradient(ellipse at center,rgba(255,106,0,0.15) 0%,transparent 70%),linear-gradient(180deg,#0a0a0a 0%,rgba(10,0,0,0.9) 50%,#0a0a0a 100%)}
+.hero::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0L60 30L30 60L0 30z' fill='none' stroke='rgba(255,106,0,0.05)' stroke-width='0.5'/%3E%3C/svg%3E");opacity:0.3}
+.hero-content{position:relative;z-index:2;max-width:900px;padding:2rem;text-align:center}
+.hero-symbol{font-size:4rem;margin-bottom:1rem;color:#ff6a00;text-shadow:0 0 40px rgba(255,106,0,0.6);animation:pulse-glow 3s ease-in-out infinite}
+@keyframes pulse-glow{0%,100%{text-shadow:0 0 20px rgba(255,106,0,0.4)}50%{text-shadow:0 0 60px rgba(255,106,0,0.8),0 0 100px rgba(255,106,0,0.3)}}
+.hero h1{font-family:'Caveat',cursive;font-size:clamp(3rem,7vw,6rem);font-weight:900;color:#ff6a00;text-transform:uppercase;letter-spacing:6px;margin-bottom:0.5rem}
+.hero .subtitle{font-family:'Montserrat',sans-serif;font-size:clamp(1rem,2vw,1.3rem);color:#888;letter-spacing:6px;text-transform:uppercase;margin-bottom:2rem}
+.hero .tagline{font-size:1.1rem;color:rgba(245,240,232,0.7);max-width:600px;margin:0 auto 3rem;line-height:1.8}
+.cta-group{display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap}
+.btn{padding:1rem 2.5rem;font-family:'Montserrat',sans-serif;font-size:0.9rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;text-decoration:none;border:none;cursor:pointer;transition:all 0.4s ease;position:relative;overflow:hidden}
+.btn-primary{background:linear-gradient(135deg,#ff6a00,#ff8c3a);color:#f0e6d3;box-shadow:0 4px 30px rgba(255,106,0,0.4)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 40px rgba(255,106,0,0.6)}
+.btn-outline{background:transparent;color:#daa520;border:1px solid #daa520}
+.btn-outline:hover{background:#daa520;color:#0a0a0a;box-shadow:0 4px 30px rgba(218,165,32,0.3)}
+section{position:relative;z-index:1;padding:6rem 2rem}
+.container{max-width:1200px;margin:0 auto}
+.section-header{text-align:center;margin-bottom:4rem}
+.section-header .overline{font-family:'Montserrat',sans-serif;font-size:0.8rem;letter-spacing:6px;color:#ff6a00;text-transform:uppercase;margin-bottom:0.5rem}
+.section-header h2{font-family:'Caveat',cursive;font-size:clamp(1.8rem,4vw,3rem);color:#f0e6d3;margin-bottom:1rem}
+.section-header p{color:#888;max-width:600px;margin:0 auto;line-height:1.7}
+.divider{width:60px;height:2px;margin:1rem auto;background:linear-gradient(90deg,transparent,#ff6a00,transparent)}
+#about{background:linear-gradient(180deg,#0a0a0a,#1a1a1a,#0a0a0a)}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;max-width:1200px;margin:0 auto;align-items:center}
+.about-text h3{font-family:'Montserrat',sans-serif;font-size:1.8rem;margin-bottom:1.5rem;color:#daa520}
+.about-text p{color:rgba(245,240,232,0.7);line-height:1.9;margin-bottom:1.5rem}
+.stats-row{display:flex;gap:3rem;margin-top:2rem;padding-top:2rem;border-top:1px solid rgba(255,106,0,0.2)}
+.stat{text-align:center}
+.stat-number{font-family:'Caveat',cursive;font-size:2.5rem;color:#ff6a00;display:block}
+.stat-label{font-size:0.75rem;color:#888;letter-spacing:2px;text-transform:uppercase}
+#mission{background:#0a0a0a}
+.mission-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:2rem;max-width:1200px;margin:0 auto}
+.mission-card{background:rgba(26,26,26,0.6);border:1px solid rgba(255,106,0,0.15);padding:2.5rem 2rem;text-align:center;transition:all 0.4s ease;position:relative;overflow:hidden}
+.mission-card::before{content:'';position:absolute;top:0;left:50%;width:0;height:2px;background:#ff6a00;transition:all 0.4s;transform:translateX(-50%)}
+.mission-card:hover::before{width:100%}
+.mission-card:hover{border-color:#ff6a00;transform:translateY(-5px);box-shadow:0 10px 30px rgba(255,106,0,0.2)}
+.mission-icon{font-size:2.5rem;margin-bottom:1rem;color:#ff6a00}
+.mission-card h4{font-family:'Montserrat',sans-serif;font-size:1.1rem;margin-bottom:0.8rem;color:#f0e6d3}
+.mission-card p{font-size:0.85rem;color:#888;line-height:1.7}
+#school{background:linear-gradient(180deg,#0a0a0a,#1a1a1a,#0a0a0a)}
+.school-promo{background:rgba(26,26,26,0.8);border:2px solid #ff6a00;border-radius:20px;padding:3rem;text-align:center}
+.school-promo h3{font-family:'Caveat',cursive;font-size:2em;color:#ff6a00;margin-bottom:1rem}
+.school-promo p{color:rgba(245,240,232,0.7);line-height:1.8;margin-bottom:2rem}
+footer{background:#0a0a0a;border-top:1px solid rgba(255,106,0,0.2);padding:3rem 2rem;text-align:center}
+.footer-logo{font-family:'Caveat',cursive;font-size:1.5rem;color:#ff6a00;margin-bottom:1rem}
+.footer-copy{font-size:0.75rem;color:#888;letter-spacing:1px}
+@media(max-width:768px){.about-grid{grid-template-columns:1fr}.stats-row{flex-wrap:wrap;gap:1.5rem}.hero-symbol{font-size:3rem}}
+</style>
+</head>
+<body>
+
+<section class="hero">
+<div class="hero-content">
+<div class="hero-symbol">⚒</div>
+<h1>FORGE</h1>
+<p class="subtitle">Молодежное движение Горна</p>
+<p class="tagline">Мы не элитка, мы выжившие. Мы — те, кто создает будущее своими руками. Образование, действие, преображение.</p>
+<div class="cta-group">
+<a href="/school/" class="btn btn-primary">🎓 Образовательный портал</a>
+<a href="#about" class="btn btn-outline">О движении</a>
+</div>
+</div>
+</section>
+
+<section id="about">
+<div class="container">
+<div class="section-header">
+<p class="overline">Кто мы</p>
+<h2>О движении FORGE</h2>
+<div class="divider"></div>
+</div>
+<div class="about-grid">
+<div class="about-text">
+<h3>Мы — кузница нового поколения</h3>
+<p>FORGE — это молодежное движение, объединяющее тех, кто не ждет перемен, а создает их. Мы верим в силу образования, практических действий и сообщества.</p>
+<p>Наша миссия — дать каждому инструменты для преображения своего пространства: от цифровой грамотности до реальных проектов благоустройства.</p>
+<p>Мы не элитка — мы выжившие. Мы те, кто берет ответственность за свое будущее и будущее своего города.</p>
+<div class="stats-row">
+<div class="stat">
+<span class="stat-number">500+</span>
+<span class="stat-label">Участников</span>
+</div>
+<div class="stat">
+<span class="stat-number">5</span>
+<span class="stat-label">Модулей обучения</span>
+</div>
+<div class="stat">
+<span class="stat-number">∞</span>
+<span class="stat-label">Возможностей</span>
+</div>
+</div>
+</div>
+<div style="background:rgba(255,106,0,0.1);border:1px solid rgba(255,106,0,0.3);border-radius:12px;padding:2rem;display:flex;align-items:center;justify-content:center">
+<div style="font-family:'Caveat',cursive;font-size:6rem;color:rgba(255,106,0,0.3)">⚒</div>
+</div>
+</div>
+</div>
+</section>
+
+<section id="mission">
+<div class="container">
+<div class="section-header">
+<p class="overline">Наши ценности</p>
+<h2>Что мы делаем</h2>
+<div class="divider"></div>
+</div>
+<div class="mission-grid">
+<div class="mission-card">
+<div class="mission-icon">🎓</div>
+<h4>Образование</h4>
+<p>Бесплатные курсы по цифровой грамотности, финансам, лидерству. Знания, которые меняют жизнь.</p>
+</div>
+<div class="mission-card">
+<div class="mission-icon">🏗</div>
+<h4>Действие</h4>
+<p>Конкурсы, проекты благоустройства, реальные изменения в наших дворах и подъездах.</p>
+</div>
+<div class="mission-card">
+<div class="mission-icon">🤝</div>
+<h4>Сообщество</h4>
+<p>Объединяем людей разных возрастов вокруг общих целей. Вместе мы сильнее.</p>
+</div>
+<div class="mission-card">
+<div class="mission-icon">💡</div>
+<h4>Инновации</h4>
+<p>Используем современные технологии и научные подходы для решения реальных проблем.</p>
+</div>
+</div>
+</div>
+</section>
+
+<section id="school">
+<div class="container">
+<div class="section-header">
+<p class="overline">Начни учиться</p>
+<h2>FORGE Academy</h2>
+<div class="divider"></div>
+<p>Образовательная платформа с научно обоснованными курсами</p>
+</div>
+<div class="school-promo">
+<h3>🚀 Первый модуль бесплатно</h3>
+<p>Пройди курс «Цифровая уверенность» — 7 уроков, основанных на теории самоэффективности Бандуры и теории самодетерминации. Получи доступ к конкурсу «Лучший подъезд FORGE».</p>
+<p><strong>Что внутри:</strong> Научные основы уверенности • Геймификация • Практические упражнения • XP и бейджи • Сообщество</p>
+<a href="/school/" class="btn btn-primary" style="margin-top:1rem">Начать обучение →</a>
+</div>
+</div>
+</section>
+
+<footer>
+<div class="container">
+<div class="footer-logo">FORGE / ГОРН</div>
+<p style="color:#888;margin-top:8px">Молодежное движение Galaxy Developers</p>
+<p class="footer-copy" style="margin-top:20px">© 2026 FORGE. Мы не элитка, мы выжившие.</p>
+</div>
+</footer>
+
+</body>
+</html>

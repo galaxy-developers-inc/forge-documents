@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORGE — Конкурс «Лучший подъезд»</title>
+<style>
+:root {
+  --primary: #667eea;
+  --primary-dark: #5a67d8;
+  --secondary: #764ba2;
+  --accent: #f5576c;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --gold: #fbbf24;
+  --silver: #9ca3af;
+  --bronze: #d97706;
+  --bg: #0f0f23;
+  --bg-card: #1a1a2e;
+  --bg-card2: #16213e;
+  --text: #e2e8f0;
+  --text-muted: #94a3b8;
+  --border: #2d3748;
+  --gradient1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --gradient2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  --gradient3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  --gradient4: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+  --gradient-gold: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Segoe UI',system-ui,-apple-system,sans-serif; background:var(--bg); color:var(--text); line-height:1.7; }
+.container { max-width:960px; margin:0 auto; padding:0 20px; }
+
+/* HERO */
+.hero { background:var(--gradient4); padding:60px 0 80px; text-align:center; position:relative; overflow:hidden; }
+.hero::before { content:''; position:absolute; top:0;left:0;right:0;bottom:0; background: url("data:image/svg+xml,%3Csvg width='80' height='80' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='10' y='10' width='60' height='60' rx='4' fill='none' stroke='white' stroke-opacity='0.08'/%3E%3Crect x='20' y='35' width='10' height='10' fill='white' fill-opacity='0.05'/%3E%3Crect x='35' y='35' width='10' height='10' fill='white' fill-opacity='0.05'/%3E%3Crect x='50' y='35' width='10' height='10' fill='white' fill-opacity='0.05'/%3E%3C/svg%3E"); }
+.hero h1 { font-size:2.8em; font-weight:800; color:#0f0f23; position:relative; }
+.hero .subtitle { font-size:1.2em; color:rgba(15,15,35,0.8); position:relative; max-width:700px; margin:10px auto 0; }
+.hero .meta { margin-top:20px; position:relative; }
+.hero .meta span { display:inline-block; background:rgba(0,0,0,0.15); color:#0f0f23; padding:6px 16px; border-radius:20px; font-size:0.9em; margin:4px; font-weight:600; }
+
+/* SECTIONS */
+.section { padding:40px 0; }
+.section-header { text-align:center; margin-bottom:30px; }
+.section-header h2 { font-size:2em; font-weight:800; background:var(--gradient1); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.section-header p { color:var(--text-muted); margin-top:8px; }
+
+/* CARDS */
+.card { background:var(--bg-card); border:1px solid var(--border); border-radius:16px; padding:28px; margin:16px 0; transition:all 0.3s; }
+.card:hover { border-color:var(--primary); box-shadow:0 0 30px rgba(102,126,234,0.1); }
+
+/* NOMINATION CARDS */
+.nominations-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(280px,1fr)); gap:20px; }
+.nom-card { background:var(--bg-card); border:2px solid var(--border); border-radius:16px; padding:24px; text-align:center; transition:all 0.3s; }
+.nom-card:hover { transform:translateY(-4px); box-shadow:0 8px 30px rgba(0,0,0,0.3); }
+.nom-card .icon { font-size:3em; margin-bottom:12px; }
+.nom-card h3 { font-size:1.3em; margin-bottom:8px; }
+.nom-card p { color:var(--text-muted); font-size:0.95em; }
+.nom-card .criteria { text-align:left; margin-top:16px; padding-top:16px; border-top:1px solid var(--border); }
+.nom-card .criteria li { padding:4px 0; font-size:0.9em; }
+.nom-card.gold { border-color:var(--gold); }
+.nom-card.silver { border-color:var(--silver); }
+.nom-card.bronze { border-color:var(--bronze); }
+
+/* TIMELINE */
+.timeline { position:relative; padding:20px 0; }
+.timeline::before { content:''; position:absolute; left:24px; top:0; bottom:0; width:3px; background:var(--gradient1); border-radius:2px; }
+.timeline-item { position:relative; padding-left:60px; margin-bottom:30px; }
+.timeline-dot { position:absolute; left:14px; top:4px; width:24px; height:24px; border-radius:50%; background:var(--gradient1); border:3px solid var(--bg); z-index:1; }
+.timeline-item h3 { color:var(--primary); font-size:1.1em; }
+.timeline-item .date { color:var(--warning); font-weight:600; font-size:0.9em; }
+.timeline-item p { color:var(--text-muted); margin-top:4px; }
+
+/* PRIZES TABLE */
+.prizes-table { width:100%; border-collapse:separate; border-spacing:0 8px; }
+.prizes-table th { text-align:left; padding:12px 16px; color:var(--text-muted); font-size:0.9em; text-transform:uppercase; letter-spacing:1px; }
+.prizes-table td { background:var(--bg-card); padding:16px; }
+.prizes-table td:first-child { border-radius:10px 0 0 10px; }
+.prizes-table td:last-child { border-radius:0 10px 10px 0; }
+.prizes-table tr.gold td { border-top:2px solid var(--gold); border-bottom:2px solid var(--gold); }
+.prizes-table tr.gold td:first-child { border-left:2px solid var(--gold); }
+.prizes-table tr.gold td:last-child { border-right:2px solid var(--gold); }
+.prize-medal { display:inline-block; width:28px; height:28px; border-radius:50%; text-align:center; line-height:28px; font-weight:800; font-size:0.9em; }
+.medal-gold { background:var(--gradient-gold); color:#0f0f23; }
+.medal-silver { background:var(--silver); color:white; }
+.medal-bronze { background:var(--bronze); color:white; }
+
+/* CRITERIA BOX */
+.criteria-box { background:var(--bg-card2); border-radius:12px; padding:20px 24px; margin:16px 0; }
+.criteria-box h3 { color:var(--primary); margin-bottom:12px; }
+.criteria-item { display:flex; gap:12px; padding:10px 0; border-bottom:1px solid var(--border); }
+.criteria-item:last-child { border-bottom:none; }
+.criteria-item .weight { background:var(--gradient1); color:white; padding:2px 10px; border-radius:20px; font-weight:700; font-size:0.85em; white-space:nowrap; height:fit-content; }
+.criteria-item .desc { flex:1; }
+.criteria-item .desc strong { display:block; margin-bottom:4px; }
+
+/* STEPS */
+.steps-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(200px,1fr)); gap:16px; }
+.step-card { background:var(--bg-card2); border-radius:12px; padding:20px; text-align:center; position:relative; }
+.step-num { position:absolute; top:-12px; left:50%; transform:translateX(-50%); background:var(--gradient1); width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:0.9em; }
+.step-card h4 { margin:12px 0 8px; }
+.step-card p { font-size:0.9em; color:var(--text-muted); }
+
+/* FAQ */
+.faq-item { background:var(--bg-card); border:1px solid var(--border); border-radius:12px; margin:10px 0; overflow:hidden; }
+.faq-q { padding:16px 20px; cursor:pointer; display:flex; justify-content:space-between; align-items:center; font-weight:600; }
+.faq-q:hover { background:rgba(102,126,234,0.05); }
+.faq-q::after { content:'+'; font-size:1.5em; color:var(--primary); transition:0.3s; }
+.faq-q.open::after { content:'−'; }
+.faq-a { padding:0 20px; max-height:0; overflow:hidden; transition:max-height 0.3s, padding 0.3s; }
+.faq-a.open { max-height:500px; padding:0 20px 16px; }
+
+/* CTA */
+.cta-section { text-align:center; padding:50px 20px; background:var(--bg-card); border:2px solid var(--primary); border-radius:20px; margin:40px 0; }
+.cta-section h2 { font-size:2em; margin-bottom:12px; }
+.btn { display:inline-block; padding:14px 32px; border-radius:12px; font-weight:700; cursor:pointer; border:none; font-size:1.05em; transition:all 0.2s; text-decoration:none; color:white; }
+.btn-primary { background:var(--gradient1); }
+.btn-primary:hover { transform:translateY(-2px); box-shadow:0 4px 20px rgba(102,126,234,0.4); }
+.btn-accent { background:var(--gradient2); }
+.btn-success { background:var(--gradient4); color:#0f0f23; }
+
+/* INFO BOX */
+.info-box { background:rgba(102,126,234,0.08); border:1px solid rgba(102,126,234,0.2); border-radius:12px; padding:20px; margin:16px 0; }
+.info-box.warning { background:rgba(245,158,11,0.08); border-color:rgba(245,158,11,0.2); }
+
+/* FOOTER */
+.footer { background:var(--bg-card); padding:40px 0; text-align:center; border-top:1px solid var(--border); }
+.footer .logo { font-size:1.5em; font-weight:800; background:var(--gradient4); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+
+@media(max-width:600px) {
+  .hero h1 { font-size:1.8em; }
+  .nominations-grid { grid-template-columns:1fr; }
+  .steps-grid { grid-template-columns:1fr 1fr; }
+  .prizes-table { font-size:0.85em; }
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div style="margin-bottom:16px; position:relative;">
+      <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIiB3aWR0aD0iODAiIGhlaWdodD0iODAiPgogIDxkZWZzPjxsaW5lYXJHcmFkaWVudCBpZD0iYmxnIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj48c3RvcCBvZmZzZXQ9IjAlIiBzdHlsZT0ic3RvcC1jb2xvcjojNDNlOTdiIi8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdHlsZT0ic3RvcC1jb2xvcjojMzhmOWQ3Ii8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+CiAgPGNpcmNsZSBjeD0iNTAiIGN5PSI1MCIgcj0iNDgiIGZpbGw9InVybCgjYmxnKSIgb3BhY2l0eT0iMC4xNSIvPgogIDxyZWN0IHg9IjI1IiB5PSIyMCIgd2lkdGg9IjUwIiBoZWlnaHQ9IjY1IiByeD0iMyIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNDNlOTdiIiBzdHJva2Utd2lkdGg9IjIuNSIvPgogIDxyZWN0IHg9IjMyIiB5PSIyOCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjgiIHJ4PSIxIiBmaWxsPSIjNDNlOTdiIiBvcGFjaXR5PSIwLjQiLz4KICA8cmVjdCB4PSI0OCIgeT0iMjgiIHdpZHRoPSIxMCIgaGVpZ2h0PSI4IiByeD0iMSIgZmlsbD0iIzQzZTk3YiIgb3BhY2l0eT0iMC40Ii8+CiAgPHJlY3QgeD0iMzIiIHk9IjQyIiB3aWR0aD0iMTAiIGhlaWdodD0iOCIgcng9IjEiIGZpbGw9IiM0M2U5N2IiIG9wYWNpdHk9IjAuNCIvPgogIDxyZWN0IHg9IjQ4IiB5PSI0MiIgd2lkdGg9IjEwIiBoZWlnaHQ9IjgiIHJ4PSIxIiBmaWxsPSIjNDNlOTdiIiBvcGFjaXR5PSIwLjQiLz4KICA8cmVjdCB4PSIzMiIgeT0iNTYiIHdpZHRoPSIxMCIgaGVpZ2h0PSI4IiByeD0iMSIgZmlsbD0iIzQzZTk3YiIgb3BhY2l0eT0iMC40Ii8+CiAgPHJlY3QgeD0iNDgiIHk9IjU2IiB3aWR0aD0iMTAiIGhlaWdodD0iOCIgcng9IjEiIGZpbGw9IiM0M2U5N2IiIG9wYWNpdHk9IjAuNCIvPgogIDxyZWN0IHg9IjQwIiB5PSI3MCIgd2lkdGg9IjE0IiBoZWlnaHQ9IjE1IiByeD0iMiIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNDNlOTdiIiBzdHJva2Utd2lkdGg9IjIiLz4KPC9zdmc+" alt="Building" style="width:80px;height:80px;">
+    </div>
+    <h1>🏆 Лучший подъезд FORGE</h1>
+    <p class="subtitle">Конкурс на лучший подъезд в вашем городе. Покажите, как ваше сообщество может преобразить пространство!</p>
+    <div class="meta">
+      <span>📅 Приём заявок: 1 апреля — 31 мая</span>
+      <span>🗳 Голосование: 1-15 июня</span>
+      <span>🏆 Финал: 20 июня</span>
+    </div>
+  </div>
+</section>
+
+<div class="container">
+
+<!-- О КОНКУРСЕ -->
+<section class="section">
+  <div class="section-header">
+    <h2>О конкурсе</h2>
+    <p>Превращаем обычные подъезды в пространства, которыми гордятся жители</p>
+  </div>
+
+  <div class="card">
+    <p style="font-size:1.1em;">Конкурс «Лучший подъезд FORGE» — это не просто соревнование по красоте стен. Это инициатива по <strong>вовлечению жителей</strong> в осознанное преобразование своего жилого пространства.</p>
+    <p style="margin-top:12px;">Мы объединяем лучшие мировые практики: от Всероссийского конкурса «Лучший дом. Лучший двор» до программ партисипаторного бюджетирования Нью-Йорка и инициатив гражданского вовлечения европейских городов.</p>
+    <p style="margin-top:12px;"><strong>Ключевой принцип:</strong> участие = образование. Каждый участник проходит Модуль 1 «Цифровая уверенность» и применяет полученные навыки для реального проекта.</p>
+  </div>
+
+  <div class="info-box">
+    <p>💡 <strong>Для участия необходимо:</strong> Завершить Модуль 1 «Цифровая уверенность» на портале FORGE Academy. Это ваш входной билет и гарантия, что вы готовы к действию.</p>
+  </div>
+</section>
+
+<!-- НОМИНАЦИИ -->
+<section class="section">
+  <div class="section-header">
+    <h2>🏅 Номинации</h2>
+    <p>5 номинаций — каждый найдёт свою</p>
+  </div>
+
+  <div class="nominations-grid">
+    <div class="nom-card gold">
+      <div class="icon">🎨</div>
+      <h3>Лучший концепт-дизайн</h3>
+      <p>За самую креативную и продуманную идею преображения подъезда. Оценивается концепция — даже если ещё не реализована.</p>
+      <div class="criteria">
+        <ul style="padding-left:16px;">
+          <li>Оригинальность идеи</li>
+          <li>Реализуемость проекта</li>
+          <li>Учёт мнения соседей</li>
+          <li>Визуализация проекта</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="nom-card gold">
+      <div class="icon">🏗</div>
+      <h3>Лучшая реализация</h3>
+      <p>За реально выполненное преображение подъезда. Фотографии «до» и «после» обязательны.</p>
+      <div class="criteria">
+        <ul style="padding-left:16px;">
+          <li>Качество исполнения</li>
+          <li>Масштаб изменений</li>
+          <li>Практичность решений</li>
+          <li>Вовлечённость соседей</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="nom-card silver">
+      <div class="icon">🤝</div>
+      <h3>Самый дружный подъезд</h3>
+      <p>За историю объединения жителей ради общего дела. Главное — не результат, а процесс сплочения.</p>
+      <div class="criteria">
+        <ul style="padding-left:16px;">
+          <li>Количество вовлечённых жителей</li>
+          <li>Описание процесса организации</li>
+          <li>Совместные решения</li>
+          <li>Продолжение инициатив</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="nom-card bronze">
+      <div class="icon">♻️</div>
+      <h3>Самый экологичный подъезд</h3>
+      <p>За решения, которые делают подъезд не только красивым, но и энергоэффективным.</p>
+      <div class="criteria">
+        <ul style="padding-left:16px;">
+          <li>Энергосбережение (LED, датчики)</li>
+          <li>Раздельный сбор мусора</li>
+          <li>Использование экоматериалов</li>
+          <li>Экономический эффект</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="nom-card bronze">
+      <div class="icon">🌟</div>
+      <h3>Молодые руки</h3>
+      <p>Для участников до 35 лет. За инициативу молодёжи в благоустройстве общего пространства.</p>
+      <div class="criteria">
+        <ul style="padding-left:16px;">
+          <li>Инициативность</li>
+          <li>Креативность решений</li>
+          <li>Вовлечение сверстников</li>
+          <li>Цифровые инструменты</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- КРИТЕРИИ ОЦЕНКИ -->
+<section class="section">
+  <div class="section-header">
+    <h2>📊 Система оценки</h2>
+    <p>Прозрачные критерии — каждый знает, за что оценивают</p>
+  </div>
+
+  <div class="criteria-box">
+    <h3>Общие критерии оценки (100 баллов)</h3>
+    <div class="criteria-item">
+      <span class="weight">30%</span>
+      <div class="desc">
+        <strong>Творческий подход и оригинальность</strong>
+        Уникальность идеи, нестандартные решения, авторский стиль
+      </div>
+    </div>
+    <div class="criteria-item">
+      <span class="weight">25%</span>
+      <div class="desc">
+        <strong>Вовлечённость сообщества</strong>
+        Сколько жителей участвовали, как принимались решения, есть ли общий чат/собрания
+      </div>
+    </div>
+    <div class="criteria-item">
+      <span class="weight">20%</span>
+      <div class="desc">
+        <strong>Качество исполнения / проработка концепта</strong>
+        Для реализации — качество работ. Для концепта — детализация визуализации
+      </div>
+    </div>
+    <div class="criteria-item">
+      <span class="weight">15%</span>
+      <div class="desc">
+        <strong>Практичность и устойчивость</strong>
+        Будут ли решения служить долго? Легко ли поддерживать? Учтён ли бюджет?
+      </div>
+    </div>
+    <div class="criteria-item">
+      <span class="weight">10%</span>
+      <div class="desc">
+        <strong>Народное голосование</strong>
+        Оценка от широкого сообщества FORGE через онлайн-голосование
+      </div>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <p>⚖️ <strong>Система оценки:</strong> 70% — экспертное жюри (архитекторы, дизайнеры, представители ЖКХ) + 30% — народное голосование на платформе FORGE</p>
+  </div>
+</section>
+
+<!-- ПРИЗЫ -->
+<section class="section">
+  <div class="section-header">
+    <h2>🎁 Призы</h2>
+    <p>Каждый участник получает награду — победители получают больше</p>
+  </div>
+
+  <table class="prizes-table">
+    <thead>
+      <tr><th>Место</th><th>Награда</th><th>Образовательные бонусы</th></tr>
+    </thead>
+    <tbody>
+      <tr class="gold">
+        <td><span class="prize-medal medal-gold">1</span> <strong>Гран-при</strong></td>
+        <td>Сертификат на 50 000 ₽ на благоустройство + Почётный знак FORGE</td>
+        <td>Полный доступ ко ВСЕМ модулям FORGE Academy (пожизненно) + Персональный менторинг</td>
+      </tr>
+      <tr>
+        <td><span class="prize-medal medal-gold">1</span> <strong>1 место (в каждой номинации)</strong></td>
+        <td>Сертификат на 15 000 ₽ + Диплом победителя</td>
+        <td>Доступ к Модулям 2-5 FORGE Academy (1 год) + VIP-статус в сообществе</td>
+      </tr>
+      <tr>
+        <td><span class="prize-medal medal-silver">2</span> <strong>2 место</strong></td>
+        <td>Сертификат на 7 000 ₽ + Диплом призёра</td>
+        <td>Доступ к Модулям 2-3 FORGE Academy (6 мес.) + Бейдж «Призёр»</td>
+      </tr>
+      <tr>
+        <td><span class="prize-medal medal-bronze">3</span> <strong>3 место</strong></td>
+        <td>Сертификат на 3 000 ₽ + Диплом</td>
+        <td>Доступ к Модулю 2 FORGE Academy (3 мес.) + Бейдж «Финалист»</td>
+      </tr>
+      <tr>
+        <td>⭐ <strong>Все участники</strong></td>
+        <td>Именной сертификат участника + Фирменный стикерпак</td>
+        <td><strong>Модуль 1 «Цифровая уверенность» (бесплатно навсегда)</strong> + 100 бонусных XP</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="info-box warning" style="margin-top:20px;">
+    <p>🔥 <strong>Спецприз «Народный выбор»:</strong> Заявка, набравшая больше всего голосов в народном голосовании (независимо от решения жюри), получает отдельный приз: доступ к Модулям 2-4 + специальный бейдж.</p>
+  </div>
+</section>
+
+<!-- КАК УЧАСТВОВАТЬ -->
+<section class="section">
+  <div class="section-header">
+    <h2>🚀 Как участвовать</h2>
+    <p>5 простых шагов от идеи до победы</p>
+  </div>
+
+  <div class="steps-grid">
+    <div class="step-card">
+      <div class="step-num">1</div>
+      <h4>🎓 Учитесь</h4>
+      <p>Пройдите Модуль 1 «Цифровая уверенность» на портале FORGE Academy</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">2</div>
+      <h4>💡 Придумайте</h4>
+      <p>Обсудите с соседями идею преображения подъезда</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">3</div>
+      <h4>📸 Оформите</h4>
+      <p>Подготовьте заявку: описание + фото/визуализация</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">4</div>
+      <h4>📤 Подайте</h4>
+      <p>Загрузите заявку на платформу FORGE до 31 мая</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">5</div>
+      <h4>🗳 Голосуйте</h4>
+      <p>Поддержите другие проекты и получите поддержку!</p>
+    </div>
+  </div>
+</section>
+
+<!-- ТАЙМЛАЙН -->
+<section class="section">
+  <div class="section-header">
+    <h2>📅 Календарь конкурса</h2>
+  </div>
+
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="date">15 марта — 31 марта</div>
+      <h3>Подготовительный этап</h3>
+      <p>Прохождение Модуля 1 на FORGE Academy. Анонс конкурса. Формирование команд.</p>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="date">1 апреля — 15 мая</div>
+      <h3>Приём заявок</h3>
+      <p>Регистрация участников. Подача проектов в выбранной номинации. Загрузка фото и описаний.</p>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="date">15 мая — 31 мая</div>
+      <h3>Доработка</h3>
+      <p>Возможность обновить заявку. Мастер-классы от экспертов. Менторские сессии для финалистов.</p>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="date">1 июня — 15 июня</div>
+      <h3>Голосование</h3>
+      <p>Народное голосование на платформе FORGE. Оценка экспертным жюри.</p>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="date">20 июня</div>
+      <h3>🏆 Финал и награждение</h3>
+      <p>Объявление победителей. Онлайн-церемония. Вручение призов и доступов.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ТРЕБОВАНИЯ К ЗАЯВКЕ -->
+<section class="section">
+  <div class="section-header">
+    <h2>📋 Требования к заявке</h2>
+  </div>
+
+  <div class="card">
+    <h3 style="color:var(--primary); margin-bottom:16px;">Обязательные элементы:</h3>
+    <ul style="padding-left:20px;">
+      <li><strong>Название проекта</strong> — яркое, запоминающееся</li>
+      <li><strong>Описание</strong> (500-2000 символов) — что сделали/планируете, зачем, как</li>
+      <li><strong>Фотографии</strong> — минимум 3 фото (для номинации «Лучшая реализация» — обязательно фото «до» и «после»)</li>
+      <li><strong>Информация об участниках</strong> — кто в команде, сколько жителей поддержали</li>
+      <li><strong>Номинация</strong> — выберите одну основную (можно подать в несколько)</li>
+      <li><strong>Подтверждение прохождения Модуля 1</strong> — скриншот сертификата или ID пользователя FORGE</li>
+    </ul>
+
+    <h3 style="color:var(--success); margin:20px 0 12px;">Дополнительно (даёт бонусные баллы):</h3>
+    <ul style="padding-left:20px;">
+      <li>Видеообзор подъезда (до 3 минут)</li>
+      <li>Смета проекта</li>
+      <li>Письмо поддержки от УК/ТСЖ</li>
+      <li>План дальнейшего развития</li>
+    </ul>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section">
+  <div class="section-header">
+    <h2>❓ Часто задаваемые вопросы</h2>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q" onclick="toggleFaq(this)">Обязательно ли проходить Модуль 1 для участия?</div>
+    <div class="faq-a">Да, прохождение Модуля 1 «Цифровая уверенность» — обязательное условие участия. Это наш способ убедиться, что каждый участник получил знания и инструменты для успешного проекта. Модуль бесплатный и занимает 2-3 часа.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q" onclick="toggleFaq(this)">Можно ли участвовать одному?</div>
+    <div class="faq-a">Да, но мы рекомендуем привлечь соседей! Проекты с участием нескольких жителей получают больше баллов по критерию «Вовлечённость сообщества» (25% от общей оценки).</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q" onclick="toggleFaq(this)">Что если подъезд ещё не преображён?</div>
+    <div class="faq-a">Это нормально! Номинация «Лучший концепт-дизайн» создана именно для проектов-идей. Представьте визуализацию (даже нарисованную от руки), опишите план — и подавайте заявку.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q" onclick="toggleFaq(this)">Как проходит народное голосование?</div>
+    <div class="faq-a">Все заявки публикуются на платформе FORGE. Зарегистрированные пользователи могут голосовать (1 голос на 1 заявку в номинации). Голосование длится 2 недели. Результаты учитываются при финальной оценке (10% от баллов) + отдельный спецприз «Народный выбор».</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q" onclick="toggleFaq(this)">Можно ли подать заявку в несколько номинаций?</div>
+    <div class="faq-a">Да! Один проект может быть подан максимум в 2 номинации. Или вы можете подать разные проекты в разные номинации.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q" onclick="toggleFaq(this)">Какие модули FORGE Academy доступны как призы?</div>
+    <div class="faq-a">
+      <ul style="padding-left:16px;">
+        <li>Модуль 1: Цифровая уверенность (бесплатен для всех)</li>
+        <li>Модуль 2: Цифровые инструменты для жизни</li>
+        <li>Модуль 3: Управление домом и ЖКХ</li>
+        <li>Модуль 4: Финансовая грамотность</li>
+        <li>Модуль 5: Лидерство и сообщество</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-section">
+  <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIiB3aWR0aD0iODAiIGhlaWdodD0iODAiPgogIDxkZWZzPjxsaW5lYXJHcmFkaWVudCBpZD0idGciIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiNmMDkzZmIiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiNmNTU3NmMiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz4KICA8Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0OCIgZmlsbD0idXJsKCN0ZykiIG9wYWNpdHk9IjAuMTUiLz4KICA8cGF0aCBkPSJNMzAgMjBoNDB2NWMwIDE1LTggMjgtMjAgMzItMTItNC0yMC0xNy0yMC0zMnYtNXoiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2Y1NTc2YyIgc3Ryb2tlLXdpZHRoPSIyLjUiLz4KICA8cGF0aCBkPSJNMzAgMjVoLThjMCAxMiA1IDE4IDggMjAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2Y1NTc2YyIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgPHBhdGggZD0iTTcwIDI1aDhjMCAxMi01IDE4LTggMjAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2Y1NTc2YyIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgPHJlY3QgeD0iNDUiIHk9IjU3IiB3aWR0aD0iMTAiIGhlaWdodD0iMTIiIHJ4PSIyIiBmaWxsPSJub25lIiBzdHJva2U9IiNmNTU3NmMiIHN0cm9rZS13aWR0aD0iMiIvPgogIDxyZWN0IHg9IjM1IiB5PSI2OSIgd2lkdGg9IjMwIiBoZWlnaHQ9IjgiIHJ4PSIzIiBmaWxsPSJub25lIiBzdHJva2U9IiNmNTU3NmMiIHN0cm9rZS13aWR0aD0iMi41Ii8+CiAgPHBhdGggZD0iTTQyIDMwbDMgNiA3IDEtNSA1IDEgNy02LTMtNiAzIDEtNy01LTUgNy0xeiIgZmlsbD0iI2Y1NTc2YyIgb3BhY2l0eT0iMC42Ii8+Cjwvc3ZnPg==" alt="Trophy" style="width:80px;margin-bottom:16px;">
+  <h2>Готовы преобразить свой подъезд?</h2>
+  <p style="color:var(--text-muted); margin-bottom:24px;">Начните с прохождения Модуля 1 — это ваш первый шаг</p>
+  <a href="forge-module1.html" class="btn btn-primary" style="margin:8px;">🎓 Пройти Модуль 1</a>
+  <a href="#" class="btn btn-success" style="margin:8px;">📤 Подать заявку</a>
+</div>
+
+<!-- FOOTER -->
+<div class="footer" style="margin-top:40px;">
+  <div class="container">
+    <div class="logo">FORGE Community</div>
+    <p style="color:var(--text-muted); margin-top:8px;">Конкурс организован при поддержке FORGE / Galaxy Developers</p>
+    <p style="color:var(--text-muted); font-size:0.85em; margin-top:12px;">Методология основана на опыте: Всероссийский конкурс «Лучший дом. Лучший двор» · Партисипаторное бюджетирование (Порту-Алегри, Нью-Йорк) · Программы гражданского вовлечения ЕС · Beautification Awards (США, Канада)</p>
+  </div>
+</div>
+
+</div><!-- container -->
+
+<script>
+function toggleFaq(el) {
+  el.classList.toggle('open');
+  el.nextElementSibling.classList.toggle('open');
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INK DAEMON — Тату Мастер Саратов | Искусство Тьмы на Коже</title>
+    <meta name="description" content="Тату мастер в Саратове. Авторские татуировки в стиле dark, gothic, blackwork, реализм. Бесплатная консультация. Запишись на сеанс.">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --blood: #8B0000;
+            --blood-bright: #DC143C;
+            --fire: #FF4500;
+            --ember: #FF6347;
+            --gold: #DAA520;
+            --gold-bright: #FFD700;
+            --bone: #F5F0E8;
+            --smoke: #1a1a1a;
+            --abyss: #0a0a0a;
+            --void: #000000;
+            --ash: #2a2a2a;
+            --gray: #888;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--void);
+            color: var(--bone);
+            overflow-x: hidden;
+            cursor: default;
+        }
+
+        ::selection {
+            background: var(--blood);
+            color: var(--bone);
+        }
+
+        /* ===== PRELOADER ===== */
+        #preloader {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--void); z-index: 10000;
+            display: flex; align-items: center; justify-content: center;
+            transition: opacity 0.8s ease;
+        }
+        #preloader.hidden { opacity: 0; pointer-events: none; }
+        .pentagram-loader {
+            width: 80px; height: 80px;
+            border: 2px solid var(--blood);
+            border-radius: 50%;
+            border-top-color: var(--gold);
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ===== PARTICLE BG ===== */
+        #particles-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 0; pointer-events: none;
+        }
+
+        /* ===== NAVBAR ===== */
+        nav {
+            position: fixed; top: 0; width: 100%; z-index: 1000;
+            padding: 1rem 2rem;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(139,0,0,0.3);
+            display: flex; justify-content: space-between; align-items: center;
+            transition: all 0.3s ease;
+        }
+        nav.scrolled {
+            padding: 0.6rem 2rem;
+            background: rgba(0,0,0,0.95);
+            border-bottom: 1px solid var(--blood);
+        }
+        .nav-logo {
+            font-family: 'Cinzel Decorative', cursive;
+            font-size: 1.4rem; font-weight: 900;
+            color: var(--blood-bright);
+            text-decoration: none;
+            letter-spacing: 3px;
+            text-shadow: 0 0 20px rgba(139,0,0,0.5);
+        }
+        .nav-logo span { color: var(--gold); }
+        .nav-links { display: flex; gap: 2rem; list-style: none; }
+        .nav-links a {
+            color: var(--bone); text-decoration: none;
+            font-size: 0.85rem; font-weight: 500;
+            letter-spacing: 2px; text-transform: uppercase;
+            transition: color 0.3s;
+            position: relative;
+        }
+        .nav-links a::after {
+            content: ''; position: absolute; bottom: -4px; left: 0;
+            width: 0; height: 1px; background: var(--blood-bright);
+            transition: width 0.3s;
+        }
+        .nav-links a:hover { color: var(--blood-bright); }
+        .nav-links a:hover::after { width: 100%; }
+
+        .burger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; }
+        .burger span { width: 25px; height: 2px; background: var(--bone); transition: all 0.3s; }
+
+        /* ===== HERO ===== */
+        .hero {
+            position: relative; min-height: 100vh;
+            display: flex; align-items: center; justify-content: center;
+            text-align: center; z-index: 1;
+            background: radial-gradient(ellipse at center, rgba(139,0,0,0.15) 0%, transparent 70%),
+                        linear-gradient(180deg, var(--void) 0%, rgba(10,0,0,0.9) 50%, var(--void) 100%);
+        }
+        .hero::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0L60 30L30 60L0 30z' fill='none' stroke='rgba(139,0,0,0.05)' stroke-width='0.5'/%3E%3C/svg%3E");
+            opacity: 0.3;
+        }
+        .hero-content { position: relative; z-index: 2; max-width: 900px; padding: 2rem; }
+        .hero-symbol {
+            font-size: 4rem; margin-bottom: 1rem;
+            color: var(--blood);
+            text-shadow: 0 0 40px rgba(139,0,0,0.6);
+            animation: pulse-glow 3s ease-in-out infinite;
+        }
+        @keyframes pulse-glow {
+            0%, 100% { text-shadow: 0 0 20px rgba(139,0,0,0.4); }
+            50% { text-shadow: 0 0 60px rgba(139,0,0,0.8), 0 0 100px rgba(139,0,0,0.3); }
+        }
+        .hero h1 {
+            font-family: 'Cinzel Decorative', cursive;
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--blood-bright), var(--gold), var(--blood-bright));
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 4s ease-in-out infinite;
+        }
+        @keyframes shimmer {
+            0%, 100% { background-position: 0% center; }
+            50% { background-position: 200% center; }
+        }
+        .hero .subtitle {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(1rem, 2vw, 1.3rem);
+            color: var(--gray);
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+        }
+        .hero .tagline {
+            font-size: 1.1rem;
+            color: rgba(245,240,232,0.7);
+            max-width: 600px; margin: 0 auto 3rem;
+            line-height: 1.8;
+        }
+        .cta-group { display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; }
+        .btn {
+            padding: 1rem 2.5rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.9rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--blood), var(--blood-bright));
+            color: var(--bone);
+            box-shadow: 0 4px 30px rgba(139,0,0,0.4);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 40px rgba(220,20,60,0.6);
+        }
+        .btn-outline {
+            background: transparent;
+            color: var(--gold);
+            border: 1px solid var(--gold);
+        }
+        .btn-outline:hover {
+            background: var(--gold);
+            color: var(--void);
+            box-shadow: 0 4px 30px rgba(218,165,32,0.3);
+        }
+
+        /* ===== SECTIONS ===== */
+        section { position: relative; z-index: 1; padding: 6rem 2rem; }
+        .section-header {
+            text-align: center; margin-bottom: 4rem;
+        }
+        .section-header .overline {
+            font-family: 'Cinzel', serif;
+            font-size: 0.8rem; letter-spacing: 6px;
+            color: var(--blood); text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+        .section-header h2 {
+            font-family: 'Cinzel Decorative', cursive;
+            font-size: clamp(1.8rem, 4vw, 3rem);
+            color: var(--bone);
+            margin-bottom: 1rem;
+        }
+        .section-header p {
+            color: var(--gray); max-width: 600px; margin: 0 auto;
+            line-height: 1.7;
+        }
+        .divider {
+            width: 60px; height: 2px; margin: 1rem auto;
+            background: linear-gradient(90deg, transparent, var(--blood), transparent);
+        }
+
+        /* ===== ABOUT ===== */
+        #about { background: linear-gradient(180deg, var(--void), var(--smoke), var(--void)); }
+        .about-grid {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 4rem; max-width: 1200px; margin: 0 auto;
+            align-items: center;
+        }
+        .about-image {
+            position: relative; aspect-ratio: 3/4;
+            background: var(--ash);
+            border: 1px solid rgba(139,0,0,0.3);
+            overflow: hidden;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .about-image-placeholder {
+            font-family: 'Cinzel Decorative', cursive;
+            font-size: 6rem; color: rgba(139,0,0,0.2);
+        }
+        .about-image::after {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(180deg, transparent 60%, var(--void));
+        }
+        .about-text h3 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.8rem; margin-bottom: 1.5rem;
+            color: var(--gold);
+        }
+        .about-text p {
+            color: rgba(245,240,232,0.7);
+            line-height: 1.9; margin-bottom: 1.5rem;
+        }
+        .stats-row {
+            display: flex; gap: 3rem; margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(139,0,0,0.2);
+        }
+        .stat { text-align: center; }
+        .stat-number {
+            font-family: 'Cinzel Decorative', cursive;
+            font-size: 2.5rem; color: var(--blood-bright);
+            display: block;
+        }
+        .stat-label {
+            font-size: 0.75rem; color: var(--gray);
+            letter-spacing: 2px; text-transform: uppercase;
+        }
+
+        /* ===== PORTFOLIO ===== */
+        #portfolio { background: var(--void); }
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem; max-width: 1200px; margin: 0 auto;
+        }
+        .portfolio-item {
+            position: relative; aspect-ratio: 1;
+            background: var(--ash);
+            border: 1px solid rgba(139,0,0,0.15);
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .portfolio-item:hover {
+            border-color: var(--blood);
+            transform: scale(1.02);
+            box-shadow: 0 10px 40px rgba(139,0,0,0.3);
+        }
+        .portfolio-placeholder {
+            font-family: 'Cinzel Decorative', cursive;
+            font-size: 3rem; color: rgba(139,0,0,0.15);
+        }
+        .portfolio-overlay {
+            position: absolute; inset: 0;
+            background: linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.9));
+            display: flex; flex-direction: column;
+            justify-content: flex-end; padding: 1.5rem;
+            opacity: 0; transition: opacity 0.4s;
+        }
+        .portfolio-item:hover .portfolio-overlay { opacity: 1; }
+        .portfolio-overlay h4 {
+            font-family: 'Cinzel', serif;
+            color: var(--gold); font-size: 1rem;
+        }
+        .portfolio-overlay span {
+            font-size: 0.8rem; color: var(--gray);
+            letter-spacing: 1px;
+        }
+
+        /* ===== STYLES ===== */
+        #styles { background: linear-gradient(180deg, var(--void), var(--smoke), var(--void)); }
+        .styles-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 2rem; max-width: 1200px; margin: 0 auto;
+        }
+        .style-card {
+            background: rgba(26,26,26,0.6);
+            border: 1px solid rgba(139,0,0,0.15);
+            padding: 2.5rem 2rem; text-align: center;
+            transition: all 0.4s ease;
+            position: relative; overflow: hidden;
+        }
+        .style-card::before {
+            content: ''; position: absolute; top: 0; left: 50%; width: 0; height: 2px;
+            background: var(--blood-bright);
+            transition: all 0.4s; transform: translateX(-50%);
+        }
+        .style-card:hover::before { width: 100%; }
+        .style-card:hover {
+            border-color: var(--blood);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(139,0,0,0.2);
+        }
+        .style-icon {
+            font-size: 2.5rem; margin-bottom: 1rem;
+            color: var(--blood);
+        }
+        .style-card h4 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem; margin-bottom: 0.8rem;
+            color: var(--bone);
+        }
+        .style-card p {
+            font-size: 0.85rem; color: var(--gray);
+            line-height: 1.7;
+        }
+
+        /* ===== PRICING ===== */
+        #pricing { background: var(--void); }
+        .pricing-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem; max-width: 1000px; margin: 0 auto;
+        }
+        .price-card {
+            background: rgba(26,26,26,0.5);
+            border: 1px solid rgba(139,0,0,0.2);
+            padding: 2.5rem; text-align: center;
+            transition: all 0.4s;
+        }
+        .price-card.featured {
+            border-color: var(--gold);
+            position: relative;
+            box-shadow: 0 0 40px rgba(218,165,32,0.1);
+        }
+        .price-card.featured::before {
+            content: 'ПОПУЛЯРНО';
+            position: absolute; top: 0; right: 0;
+            background: var(--gold); color: var(--void);
+            padding: 0.3rem 1rem; font-size: 0.65rem;
+            font-weight: 700; letter-spacing: 2px;
+        }
+        .price-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(139,0,0,0.2);
+        }
+        .price-card h4 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.2rem; margin-bottom: 0.5rem;
+        }
+        .price-amount {
+            font-family: 'Cinzel Decorative', cursive;
+            font-size: 2.5rem; color: var(--blood-bright);
+            margin: 1rem 0;
+        }
+        .price-amount span { font-size: 1rem; color: var(--gray); }
+        .price-features {
+            list-style: none; text-align: left;
+            margin: 1.5rem 0;
+        }
+        .price-features li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            color: rgba(245,240,232,0.7);
+            font-size: 0.9rem;
+        }
+        .price-features li::before {
+            content: '✦ ';
+            color: var(--blood);
+        }
+
+        /* ===== REVIEWS ===== */
+        #reviews { background: linear-gradient(180deg, var(--void), var(--smoke), var(--void)); }
+        .reviews-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem; max-width: 1200px; margin: 0 auto;
+        }
+        .review-card {
+            background: rgba(26,26,26,0.5);
+            border: 1px solid rgba(139,0,0,0.1);
+            padding: 2rem; border-radius: 0;
+            position: relative;
+            transition: all 0.3s;
+        }
+        .review-card:hover {
+            border-color: rgba(139,0,0,0.4);
+        }
+        .review-card::before {
+            content: '"';
+            font-family: 'Cinzel Decorative', cursive;
+            font-size: 4rem;
+            color: rgba(139,0,0,0.2);
+            position: absolute; top: 0.5rem; left: 1rem;
+        }
+        .review-stars { color: var(--gold); margin-bottom: 1rem; letter-spacing: 3px; }
+        .review-text {
+            font-size: 0.95rem; color: rgba(245,240,232,0.7);
+            line-height: 1.8; margin-bottom: 1.5rem;
+            font-style: italic;
+        }
+        .review-author {
+            font-family: 'Cinzel', serif;
+            font-size: 0.9rem; color: var(--bone);
+        }
+        .review-meta { font-size: 0.75rem; color: var(--gray); }
+
+        /* ===== FAQ ===== */
+        #faq { background: var(--void); }
+        .faq-list { max-width: 800px; margin: 0 auto; }
+        .faq-item {
+            border-bottom: 1px solid rgba(139,0,0,0.15);
+            padding: 1.5rem 0;
+        }
+        .faq-question {
+            display: flex; justify-content: space-between; align-items: center;
+            cursor: pointer; font-family: 'Cinzel', serif;
+            font-size: 1rem; color: var(--bone);
+            transition: color 0.3s;
+        }
+        .faq-question:hover { color: var(--blood-bright); }
+        .faq-question .icon {
+            font-size: 1.5rem; color: var(--blood);
+            transition: transform 0.3s;
+        }
+        .faq-item.active .faq-question .icon { transform: rotate(45deg); }
+        .faq-answer {
+            max-height: 0; overflow: hidden;
+            transition: max-height 0.4s ease;
+            color: var(--gray); line-height: 1.8;
+            font-size: 0.9rem;
+        }
+        .faq-item.active .faq-answer { max-height: 300px; padding-top: 1rem; }
+
+        /* ===== BOOKING ===== */
+        #booking {
+            background: radial-gradient(ellipse at center, rgba(139,0,0,0.1) 0%, transparent 70%),
+                        var(--smoke);
+        }
+        .booking-form {
+            max-width: 600px; margin: 0 auto;
+            background: rgba(10,10,10,0.8);
+            border: 1px solid rgba(139,0,0,0.3);
+            padding: 3rem;
+        }
+        .form-group { margin-bottom: 1.5rem; }
+        .form-group label {
+            display: block; margin-bottom: 0.5rem;
+            font-size: 0.8rem; letter-spacing: 2px;
+            text-transform: uppercase; color: var(--gray);
+        }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%; padding: 1rem;
+            background: rgba(26,26,26,0.8);
+            border: 1px solid rgba(139,0,0,0.2);
+            color: var(--bone); font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            transition: border-color 0.3s;
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none; border-color: var(--blood-bright);
+        }
+        .form-group textarea { resize: vertical; min-height: 120px; }
+
+        /* ===== CONTACTS ===== */
+        .contacts-row {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 2rem; max-width: 1000px; margin: 2rem auto 0;
+            text-align: center;
+        }
+        .contact-item { padding: 1.5rem; }
+        .contact-icon { font-size: 2rem; color: var(--blood); margin-bottom: 0.5rem; }
+        .contact-item h4 {
+            font-family: 'Cinzel', serif;
+            margin-bottom: 0.5rem;
+        }
+        .contact-item p, .contact-item a {
+            color: var(--gray); text-decoration: none;
+            font-size: 0.9rem; transition: color 0.3s;
+        }
+        .contact-item a:hover { color: var(--blood-bright); }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background: var(--void);
+            border-top: 1px solid rgba(139,0,0,0.2);
+            padding: 3rem 2rem; text-align: center;
+        }
+        .footer-logo {
+            font-family: 'Cinzel Decorative', cursive;
+            font-size: 1.5rem; color: var(--blood-bright);
+            margin-bottom: 1rem;
+        }
+        .footer-social { display: flex; gap: 1.5rem; justify-content: center; margin: 1.5rem 0; }
+        .footer-social a {
+            width: 44px; height: 44px;
+            border: 1px solid rgba(139,0,0,0.3);
+            display: flex; align-items: center; justify-content: center;
+            color: var(--bone); text-decoration: none;
+            font-size: 0.8rem; font-weight: 700;
+            transition: all 0.3s;
+        }
+        .footer-social a:hover {
+            background: var(--blood); border-color: var(--blood);
+        }
+        .footer-copy { font-size: 0.75rem; color: var(--gray); letter-spacing: 1px; }
+
+        /* ===== SCROLL TOP ===== */
+        .scroll-top {
+            position: fixed; bottom: 2rem; right: 2rem;
+            width: 50px; height: 50px;
+            background: var(--blood); color: var(--bone);
+            border: none; cursor: pointer;
+            font-size: 1.2rem; z-index: 999;
+            opacity: 0; transform: translateY(20px);
+            transition: all 0.3s;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .scroll-top.visible { opacity: 1; transform: translateY(0); }
+        .scroll-top:hover { background: var(--blood-bright); }
+
+        /* ===== ANIMATIONS ===== */
+        .reveal {
+            opacity: 0; transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .burger { display: flex; }
+            .nav-links.active {
+                display: flex; flex-direction: column;
+                position: absolute; top: 100%; left: 0; right: 0;
+                background: rgba(0,0,0,0.95); padding: 2rem;
+                border-bottom: 1px solid var(--blood);
+            }
+            .about-grid { grid-template-columns: 1fr; }
+            .stats-row { flex-wrap: wrap; gap: 1.5rem; }
+            .hero-symbol { font-size: 3rem; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Preloader -->
+<div id="preloader">
+    <div class="pentagram-loader"></div>
+</div>
+
+<!-- Canvas for particles -->
+<canvas id="particles-bg"></canvas>
+
+<!-- Navigation -->
+<nav id="navbar">
+    <a href="#" class="nav-logo">INK <span>DAEMON</span></a>
+    <ul class="nav-links" id="navLinks">
+        <li><a href="#about">О мастере</a></li>
+        <li><a href="#portfolio">Портфолио</a></li>
+        <li><a href="#styles">Стили</a></li>
+        <li><a href="#pricing">Цены</a></li>
+        <li><a href="#reviews">Отзывы</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="#booking" class="btn btn-primary" style="padding: 0.5rem 1.5rem; font-size: 0.75rem;">Записаться</a></li>
+    </ul>
+    <button class="burger" id="burger" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+    </button>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+    <div class="hero-content">
+        <div class="hero-symbol">⛧</div>
+        <h1>INK DAEMON</h1>
+        <p class="subtitle">Тату Мастер • Саратов</p>
+        <p class="tagline">Где тьма встречает искусство. Авторские татуировки, рождённые из глубин воображения. Каждая работа — ритуал, каждый штрих — заклинание на коже.</p>
+        <div class="cta-group">
+            <a href="#booking" class="btn btn-primary">Записаться на сеанс</a>
+            <a href="#portfolio" class="btn btn-outline">Смотреть работы</a>
+        </div>
+    </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+    <div class="section-header reveal">
+        <p class="overline">Познакомься</p>
+        <h2>Мастер Тьмы</h2>
+        <div class="divider"></div>
+    </div>
+    <div class="about-grid">
+        <div class="about-image reveal">
+            <div class="about-image-placeholder">⛧</div>
+        </div>
+        <div class="about-text reveal">
+            <h3>Искусство, выгравированное в душе</h3>
+            <p>Привет. Я — тату-мастер из Саратова, и моя миссия — превращать твои идеи в произведения тёмного искусства на коже. Каждая татуировка — это не просто рисунок, это часть тебя, история, рассказанная чернилами.</p>
+            <p>Работаю в стерильных условиях, использую только premium-расходники и индивидуальный подход к каждому клиенту. Бесплатная консультация и разработка эскиза — мой стандарт.</p>
+            <p>Специализируюсь на dark-тематике: готика, блэкворк, дарк-реализм, оккультная символика, демонология, и всё, что несёт в себе мрачную эстетику.</p>
+            <div class="stats-row">
+                <div class="stat">
+                    <span class="stat-number" data-target="500">0</span>
+                    <span class="stat-label">Работ</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number" data-target="350">0</span>
+                    <span class="stat-label">Клиентов</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number" data-target="5">0</span>
+                    <span class="stat-label">Лет опыта</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- PORTFOLIO -->
+<section id="portfolio">
+    <div class="section-header reveal">
+        <p class="overline">Галерея</p>
+        <h2>Портфолио</h2>
+        <div class="divider"></div>
+        <p>Каждая работа уникальна. Твоя — следующая.</p>
+    </div>
+    <div class="portfolio-grid">
+        <div class="portfolio-item reveal">
+            <div class="portfolio-placeholder">I</div>
+            <div class="portfolio-overlay">
+                <h4>Тёмный Ангел</h4>
+                <span>Блэкворк • Спина</span>
+            </div>
+        </div>
+        <div class="portfolio-item reveal">
+            <div class="portfolio-placeholder">II</div>
+            <div class="portfolio-overlay">
+                <h4>Череп & Розы</h4>
+                <span>Реализм • Рукав</span>
+            </div>
+        </div>
+        <div class="portfolio-item reveal">
+            <div class="portfolio-placeholder">III</div>
+            <div class="portfolio-overlay">
+                <h4>Оккультная Геометрия</h4>
+                <span>Дотворк • Предплечье</span>
+            </div>
+        </div>
+        <div class="portfolio-item reveal">
+            <div class="portfolio-placeholder">IV</div>
+            <div class="portfolio-overlay">
+                <h4>Демон Рассвета</h4>
+                <span>Дарк-реализм • Грудь</span>
+            </div>
+        </div>
+        <div class="portfolio-item reveal">
+            <div class="portfolio-placeholder">V</div>
+            <div class="portfolio-overlay">
+                <h4>Готический Собор</h4>
+                <span>Лайнворк • Бедро</span>
+            </div>
+        </div>
+        <div class="portfolio-item reveal">
+            <div class="portfolio-placeholder">VI</div>
+            <div class="portfolio-overlay">
+                <h4>Серафим</h4>
+                <span>Блэкворк • Спина</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- STYLES -->
+<section id="styles">
+    <div class="section-header reveal">
+        <p class="overline">Направления</p>
+        <h2>Стили</h2>
+        <div class="divider"></div>
+    </div>
+    <div class="styles-grid">
+        <div class="style-card reveal">
+            <div class="style-icon">🖤</div>
+            <h4>Блэкворк</h4>
+            <p>Масштабные чёрные заливки, геометрия и орнаменты. Сила и минимализм в каждом штрихе.</p>
+        </div>
+        <div class="style-card reveal">
+            <div class="style-icon">💀</div>
+            <h4>Дарк-Реализм</h4>
+            <p>Фотореалистичные работы в мрачной эстетике. Черепа, демоны, тёмные ангелы — до мурашек.</p>
+        </div>
+        <div class="style-card reveal">
+            <div class="style-icon">⛧</div>
+            <h4>Готика & Оккульт</h4>
+            <p>Сакральная геометрия, алхимические символы, средневековые мотивы и тёмная мистика.</p>
+        </div>
+        <div class="style-card reveal">
+            <div class="style-icon">🌑</div>
+            <h4>Дотворк</h4>
+            <p>Тысячи точек складываются в гипнотические узоры. Медитативный процесс, вечный результат.</p>
+        </div>
+        <div class="style-card reveal">
+            <div class="style-icon">🗡️</div>
+            <h4>Нео-традишнл</h4>
+            <p>Классика олд-скула, переосмысленная через призму тьмы. Яркие контуры, мрачные сюжеты.</p>
+        </div>
+        <div class="style-card reveal">
+            <div class="style-icon">🦇</div>
+            <h4>Хоррор</h4>
+            <p>Портреты из культовых хорроров, создания ночи, кошмары, ставшие искусством.</p>
+        </div>
+    </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+    <div class="section-header reveal">
+        <p class="overline">Инвестиция в себя</p>
+        <h2>Цены</h2>
+        <div class="divider"></div>
+        <p>Прозрачные цены. Никаких сюрпризов. Эскиз и консультация — бесплатно.</p>
+    </div>
+    <div class="pricing-grid">
+        <div class="price-card reveal">
+            <h4>Мини-тату</h4>
+            <div class="price-amount">2 500 ₽ <span>от</span></div>
+            <ul class="price-features">
+                <li>Размер до 7 см</li>
+                <li>Эскиз включён</li>
+                <li>Защитная плёнка</li>
+                <li>Консультация по уходу</li>
+                <li>1 бесплатная коррекция</li>
+            </ul>
+            <a href="#booking" class="btn btn-outline" style="width:100%; display:block; text-align:center;">Записаться</a>
+        </div>
+        <div class="price-card featured reveal">
+            <h4>Средняя работа</h4>
+            <div class="price-amount">5 000 ₽ <span>от</span></div>
+            <ul class="price-features">
+                <li>Размер 7–20 см</li>
+                <li>Индивидуальный эскиз</li>
+                <li>Premium расходники</li>
+                <li>Заживляющий крем</li>
+                <li>Бесплатная коррекция</li>
+                <li>Фотосессия работы</li>
+            </ul>
+            <a href="#booking" class="btn btn-primary" style="width:100%; display:block; text-align:center;">Записаться</a>
+        </div>
+        <div class="price-card reveal">
+            <h4>Масштабный проект</h4>
+            <div class="price-amount">3 000 ₽ <span>/ час</span></div>
+            <ul class="price-features">
+                <li>Рукава, спина, большие зоны</li>
+                <li>Детальная проработка</li>
+                <li>Поэтапная оплата</li>
+                <li>VIP-сервис</li>
+                <li>Коррекции включены</li>
+                <li>Фото до/после/зажило</li>
+            </ul>
+            <a href="#booking" class="btn btn-outline" style="width:100%; display:block; text-align:center;">Обсудить проект</a>
+        </div>
+    </div>
+</section>
+
+<!-- REVIEWS -->
+<section id="reviews">
+    <div class="section-header reveal">
+        <p class="overline">Голоса</p>
+        <h2>Отзывы</h2>
+        <div class="divider"></div>
+    </div>
+    <div class="reviews-grid">
+        <div class="review-card reveal">
+            <div class="review-stars">★★★★★</div>
+            <p class="review-text">Пришёл за мини-тату, ушёл с планом на рукав. Мастер реально чувствует, что тебе нужно. Атмосфера в студии — огонь, стерильность на уровне.</p>
+            <p class="review-author">Алексей К.</p>
+            <p class="review-meta">Блэкворк • Предплечье</p>
+        </div>
+        <div class="review-card reveal">
+            <div class="review-stars">★★★★★</div>
+            <p class="review-text">Делала первую тату и жутко боялась. Всё объяснили, показали инструменты, успокоили. Результат — просто космос. Уже записалась на вторую!</p>
+            <p class="review-author">Мария В.</p>
+            <p class="review-meta">Готика • Ключица</p>
+        </div>
+        <div class="review-card reveal">
+            <div class="review-stars">★★★★★</div>
+            <p class="review-text">Закрыли старый кривой партак шедевром. Не верил, что так можно. Зажило идеально, спустя 3 месяца выглядит ещё лучше чем свежая.</p>
+            <p class="review-author">Дмитрий П.</p>
+            <p class="review-meta">Перекрытие • Плечо</p>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+    <div class="section-header reveal">
+        <p class="overline">Ответы</p>
+        <h2>Частые вопросы</h2>
+        <div class="divider"></div>
+    </div>
+    <div class="faq-list">
+        <div class="faq-item reveal">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span>Больно ли делать татуировку?</span>
+                <span class="icon">+</span>
+            </div>
+            <div class="faq-answer">Ощущения индивидуальны и зависят от зоны. Большинство клиентов описывают это как терпимый дискомфорт. Я работаю аккуратно, делаю перерывы, при необходимости используем анестезирующий крем. Первый раз всегда волнительно, но 99% клиентов говорят: «Было не так страшно, как я думал».</div>
+        </div>
+        <div class="faq-item reveal">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span>Как подготовиться к сеансу?</span>
+                <span class="icon">+</span>
+            </div>
+            <div class="faq-answer">Выспитесь, поешьте за 1–2 часа до сеанса, не пейте алкоголь за сутки. Наденьте удобную одежду с доступом к зоне тату. Возьмите с собой воду и перекус для длинных сеансов. Всё остальное — моя забота.</div>
+        </div>
+        <div class="faq-item reveal">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span>Сколько заживает татуировка?</span>
+                <span class="icon">+</span>
+            </div>
+            <div class="faq-answer">Поверхностное заживление — 2–3 недели. Полное заживление в глубоких слоях кожи — до 2 месяцев. Я дам подробную инструкцию по уходу и буду на связи на протяжении всего процесса заживления.</div>
+        </div>
+        <div class="faq-item reveal">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span>Можно ли перекрыть старую татуировку?</span>
+                <span class="icon">+</span>
+            </div>
+            <div class="faq-answer">Да! Перекрытие — одно из моих сильных направлений. Присылайте фото старой тату, и я предложу варианты. Тёмные стили идеально подходят для качественного перекрытия.</div>
+        </div>
+        <div class="faq-item reveal">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <span>Как записаться и сколько ждать?</span>
+                <span class="icon">+</span>
+            </div>
+            <div class="faq-answer">Напишите мне в Telegram, VK или через форму на сайте. Расскажите идею, зону и примерный размер. Я отвечу в течение нескольких часов, предложу варианты дат. Обычно запись — на 1–2 недели вперёд.</div>
+        </div>
+    </div>
+</section>
+
+<!-- BOOKING -->
+<section id="booking">
+    <div class="section-header reveal">
+        <p class="overline">Начни</p>
+        <h2>Запись на сеанс</h2>
+        <div class="divider"></div>
+        <p>Заполни форму или напиши напрямую — ответ в течение 2 часов</p>
+    </div>
+    <div class="booking-form reveal">
+        <form id="bookingForm" onsubmit="handleSubmit(event)">
+            <div class="form-group">
+                <label>Имя</label>
+                <input type="text" name="name" placeholder="Как тебя зовут?" required>
+            </div>
+            <div class="form-group">
+                <label>Телефон / Telegram</label>
+                <input type="text" name="contact" placeholder="+7 (___) ___-__-__ или @username" required>
+            </div>
+            <div class="form-group">
+                <label>Стиль</label>
+                <select name="style">
+                    <option>Блэкворк</option>
+                    <option>Дарк-Реализм</option>
+                    <option>Готика & Оккульт</option>
+                    <option>Дотворк</option>
+                    <option>Нео-традишнл</option>
+                    <option>Хоррор</option>
+                    <option>Перекрытие</option>
+                    <option>Другое / Не знаю</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Опиши идею</label>
+                <textarea name="idea" placeholder="Расскажи, что хочешь: сюжет, зона, размер, референсы..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width:100%">Отправить заявку ⛧</button>
+        </form>
+    </div>
+
+    <div class="contacts-row reveal">
+        <div class="contact-item">
+            <div class="contact-icon">📱</div>
+            <h4>Telegram</h4>
+            <a href="https://t.me/inkdaemon">@inkdaemon</a>
+        </div>
+        <div class="contact-item">
+            <div class="contact-icon">💬</div>
+            <h4>VK</h4>
+            <a href="https://vk.com/inkdaemon">vk.com/inkdaemon</a>
+        </div>
+        <div class="contact-item">
+            <div class="contact-icon">📍</div>
+            <h4>Адрес</h4>
+            <p>Саратов, ул. [Адрес], каб. [X]</p>
+        </div>
+        <div class="contact-item">
+            <div class="contact-icon">📞</div>
+            <h4>Телефон</h4>
+            <a href="tel:+79001234567">+7 (900) 123-45-67</a>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <div class="footer-logo">INK DAEMON</div>
+    <div class="footer-social">
+        <a href="#" title="Telegram">TG</a>
+        <a href="#" title="VKontakte">VK</a>
+        <a href="#" title="Instagram">IG</a>
+        <a href="#" title="TikTok">TT</a>
+        <a href="#" title="Авито">AV</a>
+    </div>
+    <p class="footer-copy">© 2026 INK DAEMON — Тату Мастер Саратов. Все права защищены.</p>
+</footer>
+
+<!-- Scroll Top -->
+<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+    // Preloader
+    window.addEventListener('load', () => {
+        setTimeout(() => {
+            document.getElementById('preloader').classList.add('hidden');
+        }, 800);
+    });
+
+    // Particles
+    const canvas = document.getElementById('particles-bg');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    class Particle {
+        constructor() {
+            this.reset();
+        }
+        reset() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.size = Math.random() * 2;
+            this.speedY = -Math.random() * 0.5 - 0.1;
+            this.speedX = (Math.random() - 0.5) * 0.3;
+            this.opacity = Math.random() * 0.5;
+        }
+        update() {
+            this.y += this.speedY;
+            this.x += this.speedX;
+            this.opacity -= 0.001;
+            if (this.y < 0 || this.opacity <= 0) this.reset();
+        }
+        draw() {
+            ctx.fillStyle = `rgba(139, 0, 0, ${this.opacity})`;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fill();
+        }
+    }
+
+    for (let i = 0; i < 80; i++) particles.push(new Particle());
+
+    function animateParticles() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => { p.update(); p.draw(); });
+        requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
+
+    // Navbar
+    window.addEventListener('scroll', () => {
+        const nav = document.getElementById('navbar');
+        const scrollTop = document.getElementById('scrollTop');
+        if (window.scrollY > 50) nav.classList.add('scrolled');
+        else nav.classList.remove('scrolled');
+        if (window.scrollY > 500) scrollTop.classList.add('visible');
+        else scrollTop.classList.remove('visible');
+    });
+
+    // Mobile menu
+    function toggleMenu() {
+        document.getElementById('navLinks').classList.toggle('active');
+    }
+
+    // Reveal on scroll
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+            }
+        });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // Counter animation
+    const counterObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const target = parseInt(entry.target.getAttribute('data-target'));
+                let current = 0;
+                const increment = target / 60;
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        entry.target.textContent = target + '+';
+                        clearInterval(timer);
+                    } else {
+                        entry.target.textContent = Math.floor(current);
+                    }
+                }, 30);
+                counterObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.5 });
+
+    document.querySelectorAll('.stat-number').forEach(el => counterObserver.observe(el));
+
+    // FAQ
+    function toggleFaq(el) {
+        el.closest('.faq-item').classList.toggle('active');
+    }
+
+    // Form
+    function handleSubmit(e) {
+        e.preventDefault();
+        const form = e.target;
+        const btn = form.querySelector('button');
+        btn.textContent = '✦ Заявка отправлена!';
+        btn.style.background = 'linear-gradient(135deg, #228B22, #32CD32)';
+        setTimeout(() => {
+            btn.textContent = 'Отправить заявку ⛧';
+            btn.style.background = '';
+            form.reset();
+        }, 3000);
+    }
+
+    // Close mobile menu on link click
+    document.querySelectorAll('.nav-links a').forEach(link => {
+        link.addEventListener('click', () => {
+            document.getElementById('navLinks').classList.remove('active');
+        });
+    });
+</script>
+</body>
+</html>
